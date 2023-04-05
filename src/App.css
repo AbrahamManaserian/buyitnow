@@ -4,14 +4,15 @@
   /* min-height: 50px; */
   border-radius: 10px;
   align-items: center;
-  /* text-decoration: none; */
-  color: #d53c1d;
+  text-decoration: none;
+  /* color: #6d46e1; */
   /* margin: 3px ; */
   margin-right:3px;
   /* padding-left: 15px; */
 
   
 }
-.linko:hover {
+/* .linko:hover {
 background-color: rgb(245, 245, 245);
-}
+} */
+

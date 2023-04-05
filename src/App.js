@@ -8,6 +8,7 @@ import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 import './App.css';
 import BarMenu from './components/BarMenu';
 import Footer from './components/Footer';
+import useGetUser from './components/useGetUser';
 
 export const getDesignTokens = (mode) => ({
   palette: {
@@ -212,8 +213,9 @@ export const getDesignTokens = (mode) => ({
 });
 export const AppContext = createContext();
 function App() {
+  let user = useGetUser();
   const [language, setLanguage] = useState(localStorage.getItem('language') || '2');
-  const [darkMode, setDarkMode] = useState(localStorage.getItem('darkMode') || 'light');
+  const [darkMode, setDarkMode] = useState(localStorage.getItem('darkMode') || 'dark');
   const theme = createTheme(getDesignTokens(darkMode || 'dark'));
 
   return (
@@ -225,6 +227,7 @@ function App() {
           setLanguage: setLanguage,
           darkMode: darkMode,
           setDarkMode: setDarkMode,
+          user: user,
         }}
       >
         <BarMenu />
