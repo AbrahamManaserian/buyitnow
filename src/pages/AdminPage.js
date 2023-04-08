@@ -170,7 +170,7 @@ export function StateTextFields() {
           AAH: AAH,
           nature: nature,
           total: max + AAH + nature,
-          total$: Math.round(max + AAH + nature * inputs.change),
+          total$: Math.round((max + AAH + nature) * inputs.change),
         });
       } else {
         const max = Math.round(
@@ -185,7 +185,7 @@ export function StateTextFields() {
           AAH: AAH,
           nature: nature,
           total: max + AAH + nature,
-          total$: Math.round(max + AAH + nature),
+          total$: Math.round((max + AAH + nature) * inputs.change),
         });
       }
     }
