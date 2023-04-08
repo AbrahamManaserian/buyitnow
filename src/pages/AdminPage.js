@@ -92,6 +92,10 @@ export function StateTextFields() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const nature =
+      new Date().getFullYear() - +data.get('year') > 4
+        ? Math.round((inputs.total / inputs.change) * 0.02)
+        : 0;
     // console.log(new Date().getFullYear() - 3 <= +data.get('year'));
     if (new Date().getFullYear() - 3 <= +data.get('year')) {
       let clearance = 0;
@@ -125,64 +129,63 @@ export function StateTextFields() {
       }
     } else {
       if (+data.get('size') <= 1 || (+data.get('size') > 1.5 && +data.get('size') <= 1.8)) {
-        let clearance =
-          (+data.get('size') * 0.36 * 1000 + +inputs.total / data.get('change')) * 0.2 +
-          +data.get('size') * 0.36 * 1000;
-        let nature =
-          new Date().getFullYear() - +data.get('year') > 4
-            ? Math.round((inputs.total / inputs.change) * 0.02)
-            : 0;
+        const max = Math.round(
+          +data.get('size') * 0.36 * 1000 < (+inputs.total / inputs.change) * 0.2
+            ? (+inputs.total / inputs.change) * 0.2
+            : +data.get('size') * 0.36 * 1000
+        );
+        const AAH = Math.round((max + +inputs.total / data.get('change')) * 0.2);
+
         setResult({
-          max: Math.round(+data.get('size') * 0.36 * 1000),
-          AAH: Math.round(Math.round(+data.get('size') * 0.36 * 1000 + inputs.total / inputs.change) * 0.2),
+          max: max,
+          AAH: AAH,
           nature: nature,
-          total: Math.round(clearance) + nature,
-          total$: Math.round(clearance * inputs.change) + nature,
+          total: max + AAH + nature,
+          total$: Math.round((max + AAH + nature) * inputs.change),
         });
       } else if (+data.get('size') > 1 && +data.get('size') <= 1.5) {
-        let clearance =
-          (+data.get('size') * 0.4 * 1000 + +inputs.total / data.get('change')) * 0.2 +
-          +data.get('size') * 0.4 * 1000;
-        let nature =
-          new Date().getFullYear() - +data.get('year') > 4
-            ? Math.round((inputs.total / inputs.change) * 0.02)
-            : 0;
+        const max = Math.round(
+          +data.get('size') * 0.4 * 1000 < (+inputs.total / inputs.change) * 0.2
+            ? (+inputs.total / inputs.change) * 0.2
+            : +data.get('size') * 0.4 * 1000
+        );
+        const AAH = Math.round((max + +inputs.total / data.get('change')) * 0.2);
+
         setResult({
-          max: Math.round(+data.get('size') * 0.4 * 1000),
-          AAH: Math.round(Math.round(+data.get('size') * 0.4 * 1000 + inputs.total / inputs.change) * 0.2),
+          max: max,
+          AAH: AAH,
           nature: nature,
-          total: Math.round(clearance) + nature,
-          total$: Math.round(clearance * inputs.change) + nature,
+          total: max + AAH + nature,
+          total$: Math.round((max + AAH + nature) * inputs.change),
         });
       } else if (+data.get('size') > 1.8 && +data.get('size') <= 3) {
-        let clearance =
-          (+data.get('size') * 0.44 * 1000 + +inputs.total / data.get('change')) * 0.2 +
-          +data.get('size') * 0.44 * 1000;
-        let nature =
-          new Date().getFullYear() - +data.get('year') > 4
-            ? Math.round((inputs.total / inputs.change) * 0.02)
-            : 0;
+        const max = Math.round(
+          +data.get('size') * 0.44 * 1000 < (+inputs.total / inputs.change) * 0.2
+            ? (+inputs.total / inputs.change) * 0.2
+            : +data.get('size') * 0.44 * 1000
+        );
+        const AAH = Math.round((max + +inputs.total / data.get('change')) * 0.2);
         setResult({
-          max: Math.round(+data.get('size') * 0.44 * 1000),
-          AAH: Math.round(Math.round(+data.get('size') * 0.44 * 1000 + inputs.total / inputs.change) * 0.2),
+          max: max,
+          AAH: AAH,
           nature: nature,
-          total: Math.round(clearance) + nature,
-          total$: Math.round(clearance * inputs.change) + nature,
+          total: max + AAH + nature,
+          total$: Math.round(max + AAH + nature * inputs.change),
         });
       } else {
-        let clearance =
-          (+data.get('size') * 0.8 * 1000 + +inputs.total / data.get('change')) * 0.2 +
-          +data.get('size') * 0.8 * 1000;
-        let nature =
-          new Date().getFullYear() - +data.get('year') > 4
-            ? Math.round((inputs.total / inputs.change) * 0.02)
-            : 0;
+        const max = Math.round(
+          +data.get('size') * 0.8 * 1000 < (+inputs.total / inputs.change) * 0.2
+            ? (+inputs.total / inputs.change) * 0.2
+            : +data.get('size') * 0.8 * 1000
+        );
+        const AAH = Math.round((max + +inputs.total / data.get('change')) * 0.2);
+
         setResult({
-          max: Math.round(+data.get('size') * 0.8 * 1000),
-          AAH: Math.round(Math.round(+data.get('size') * 0.8 * 1000 + inputs.total / inputs.change) * 0.2),
+          max: max,
+          AAH: AAH,
           nature: nature,
-          total: Math.round(clearance) + nature,
-          total$: Math.round(clearance * inputs.change) + nature,
+          total: max + AAH + nature,
+          total$: Math.round(max + AAH + nature),
         });
       }
     }
