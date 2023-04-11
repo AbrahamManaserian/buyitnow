@@ -80,7 +80,7 @@ export function StateTextFields() {
     fobCar: '',
     total: '',
     ship: '',
-    change: 1.092,
+    change: localStorage.getItem('change') || 1.092,
   });
   const sizes = [
     0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7,
@@ -92,12 +92,13 @@ export function StateTextFields() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const num = inputs.month < new Date().getMonth() + 2 && inputs.month ? 1 : 0;
     const nature =
-      new Date().getFullYear() - +data.get('year') > 4
+      new Date().getFullYear() + num - +data.get('year') > 4
         ? Math.round((inputs.total / inputs.change) * 0.02)
         : 0;
     // console.log(new Date().getFullYear() - 3 <= +data.get('year'));
-    if (new Date().getFullYear() - 3 <= +data.get('year')) {
+    if (new Date().getFullYear() + num - 3 <= +data.get('year')) {
       let clearance = 0;
       if (+data.get('size') < 2.9) {
         // clearance = ((inputs.total / 1.092) * 0.15 + inputs.total / 1.092) * 0.2
@@ -191,6 +192,9 @@ export function StateTextFields() {
     }
   };
   const handleChange = (event) => {
+    if (event.target.name === 'change') {
+      localStorage.setItem('change', event.target.value);
+    }
     if (event.target.name === 'price') {
       if (event.target.value >= 15000) {
         const fob = (event.target.value * 5.5) / 100 + 129 + 79;
