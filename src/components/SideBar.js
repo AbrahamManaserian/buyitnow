@@ -49,7 +49,7 @@ const Box1 = styled(Box)(({ theme, menulength }) => ({
   cursor: 'pointer',
 }));
 
-export default function SideBar() {
+export default function SideBar({ open, toggleDrawer }) {
   const [menuLength, setMenuLength] = useState(true);
   const location = useLocation();
   const context = useContext(AppContext);
@@ -66,10 +66,7 @@ export default function SideBar() {
   }
 
   return (
-    <Grid1
-      //   sx={{ display: { xs: 'none', lg: 'flex' } }}
-      menulength={+menuLength}
-    >
+    <Grid1 sx={{ display: { xs: open, lg: 'flex' } }} menulength={+menuLength}>
       <Box1 onClick={() => setMenuLength(!menuLength)} menulength={+menuLength}>
         {menuLength ? (
           <ArrowBackIosIcon sx={{ fontSize: '12px', paddingLeft: '4px', color: '#757575' }} />

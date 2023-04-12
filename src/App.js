@@ -232,7 +232,7 @@ function App() {
         }}
       >
         <Grid item xs container alignItems="flex-start">
-          <SideBar />
+          <SideBar open="none" />
           <Grid item xs container>
             <BarMenu />
             <Outlet />

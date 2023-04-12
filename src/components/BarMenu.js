@@ -1,4 +1,4 @@
-import { Box, Button, Grid } from '@mui/material';
+import { Box, Button, Drawer, Grid } from '@mui/material';
 import { barText } from '../texts';
 import { getText } from '../texts';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
@@ -10,11 +10,12 @@ import { AppContext } from '../App';
 import { Link, useLocation } from 'react-router-dom';
 import { BusketIcon } from '../SVGIcons';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { getAuth, signOut } from 'firebase/auth';
 import FlagMenu from './FlagMenu';
+import SideBar from './SideBar';
 
 export function UserMenu() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -69,11 +70,17 @@ export function UserMenu() {
 }
 
 export default function BarMenu() {
+  const [openDrawer, setOPenDrawer] = useState(false);
   const context = useContext(AppContext);
   let url = new URL(window.location.href);
   const location = useLocation();
-  console.log(context);
-
+  // console.log(context);
+  const toggleDrawer = (open) => (event) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+    setOPenDrawer(open);
+  };
   const handleCLickDarkMode = () => {
     if (context.darkMode === 'light') {
       context.setDarkMode('dark');
@@ -83,6 +90,7 @@ export default function BarMenu() {
       localStorage.setItem('darkMode', 'light');
     }
   };
+  console.log(openDrawer);
   return (
     <Grid
       p="5px 10px 0 0"
@@ -97,6 +105,14 @@ export default function BarMenu() {
         boxShadow: '0 1px 8px -10px rgb(117, 117, 117, 0.1), 0 7px 10px 0 rgb(117, 117, 117, 0.1)',
       }}
     >
+      <Box sx={{ flexGrow: 1, paddingLeft: '5px', display: { xs: 'block', lg: 'none', xl: 'none' } }}>
+        <FormatListBulletedIcon cursor="pointer" onClick={toggleDrawer(true)} />
+      </Box>
+      <Drawer anchor="left" open={openDrawer} onClose={toggleDrawer(false)}>
+        <div onClick={toggleDrawer(false)} onKeyDown={toggleDrawer(false)}>
+          <SideBar />
+        </div>
+      </Drawer>
       <FlagMenu />
       <div style={{ cursor: 'pointer', padding: '0 10px 0 10px' }} onClick={handleCLickDarkMode}>
         {context.darkMode === 'dark' ? (
