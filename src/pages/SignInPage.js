@@ -107,7 +107,7 @@ export default function SignIn() {
               label={getText('email')}
               name="email"
               autoComplete="email"
-              autoFocus
+              // autoFocus
               helperText={error && error !== 'auth/wrong-password' ? 'Incorrect entry.' : ''}
             />
             <TextField

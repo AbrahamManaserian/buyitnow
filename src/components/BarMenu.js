@@ -14,6 +14,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { getAuth, signOut } from 'firebase/auth';
+import FlagMenu from './FlagMenu';
 
 export function UserMenu() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -36,7 +37,7 @@ export function UserMenu() {
     setAnchorEl(null);
   }
   return (
-    <Box display="flex" alignContent="center" p="5px">
+    <Box display="flex" alignContent="center">
       <AccountCircleIcon
         color="primary"
         aria-controls={open ? 'basic-menu' : undefined}
@@ -54,11 +55,12 @@ export function UserMenu() {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={handleClose}>
-          <Link style={{ color: 'inherit' }} className="linko" to="/admin">
-            Profile
-          </Link>
-        </MenuItem>
+        <Link
+          style={{ color: 'inherit', display: 'block', width: '100%', textDecoration: 'none' }}
+          to="/admin"
+        >
+          <MenuItem onClick={handleClose}>Profile</MenuItem>
+        </Link>
         <MenuItem onClick={handleClose}>My account</MenuItem>
         <MenuItem onClick={signOutUser}>Logout</MenuItem>
       </Menu>
@@ -70,7 +72,7 @@ export default function BarMenu() {
   const context = useContext(AppContext);
   let url = new URL(window.location.href);
   const location = useLocation();
-  // console.log(context);
+  console.log(context);
 
   const handleCLickDarkMode = () => {
     if (context.darkMode === 'light') {
@@ -82,17 +84,27 @@ export default function BarMenu() {
     }
   };
   return (
-    <Grid item container xs={12} justifyContent="center">
-      {/* <img src={Logo} style={{ maxWidth: '100px', height: 'auto' }} /> */}
-      <Box sx={{ flexGrow: 1, justifyContent: 'center', padding: '5px' }}>
-        <Link style={{ color: context.darkMode === 'dark' ? '#2196f3' : '#1565c0' }} className="linko" to="/">
-          {getText('home', context.language, barText)}
-        </Link>
-      </Box>
-
-      {/* <Link className="linko" to="/about">
-        about
-      </Link> */}
+    <Grid
+      p="5px 10px 0 0"
+      item
+      container
+      xs={12}
+      justifyContent="flex-end"
+      sx={{
+        position: 'sticky',
+        top: 0,
+        bgcolor: 'background.default',
+        boxShadow: '0 1px 8px -10px rgb(117, 117, 117, 0.1), 0 7px 10px 0 rgb(117, 117, 117, 0.1)',
+      }}
+    >
+      <FlagMenu />
+      <div style={{ cursor: 'pointer', padding: '0 10px 0 10px' }} onClick={handleCLickDarkMode}>
+        {context.darkMode === 'dark' ? (
+          <LightModeOutlinedIcon sx={{ color: 'greenCustome.main' }} />
+        ) : (
+          <DarkModeOutlinedIcon color="success" />
+        )}
+      </div>
 
       {context.user ? (
         <UserMenu />
@@ -102,21 +114,14 @@ export default function BarMenu() {
             url.pathname.includes('signin') ? url.search : `/signin/?${location.pathname + location.search}`
           }
           style={{
-            color: context.darkMode === 'dark' ? '#2196f3' : '#1565c0',
-            padding: '5px',
+            color: context.darkMode === 'dark' ? '#cfd8dc' : '#546e7a',
+            // padding: '5px',
             textDecoration: 'none',
           }}
         >
-          sign in
+          {getText('signIn', context.language, barText)}
         </Link>
       )}
-      <div style={{ cursor: 'pointer', padding: '5px' }} onClick={handleCLickDarkMode}>
-        {context.darkMode === 'dark' ? (
-          <LightModeOutlinedIcon sx={{ color: 'greenCustome.main' }} />
-        ) : (
-          <DarkModeOutlinedIcon color="success" />
-        )}
-      </div>
     </Grid>
   );
 }

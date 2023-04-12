@@ -24,7 +24,15 @@ export default function HomePage() {
   const context = useContext(AppContext);
 
   return (
-    <Grid item xs={12} padding="40px" container direction="column" alignContent="center" alignItems="center">
+    <Grid
+      item
+      xs={12}
+      padding="40px"
+      container
+      direction="column"
+      // alignContent="flex-end"
+      alignItems="center"
+    >
       <img style={{ width: '30%', height: 'auto' }} src={Image2} />
       <Typography fontWeight={800} variant="h3" alignSelf="center">
         Coming soon
@@ -34,10 +42,10 @@ export default function HomePage() {
       </Typography>
       <Copyright sx={{ mt: 8 }} />
       <Typography color="text.secondary" variant="body2">
-        Phone - <Link href="tel:+37477055777">+37477055777</Link>
+        Phones: - <Link href="tel:+37477055777">+37477055777</Link>
       </Typography>
-      <Typography color="text.secondary" variant="body2">
-        Phone1 - <Link href="tel:+37477577348">+37477577348</Link>
+      <Typography paddingLeft="54px" color="text.secondary" variant="body2">
+        - <Link href="tel:+37477577348">+37477577348</Link>
       </Typography>
     </Grid>
   );

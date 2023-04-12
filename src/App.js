@@ -2,12 +2,13 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
+import { createTheme, CssBaseline, Grid, ThemeProvider } from '@mui/material';
 import { createContext, useCallback, useState } from 'react';
-import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Link, Outlet, RouterProvider } from 'react-router-dom';
 import './App.css';
 import BarMenu from './components/BarMenu';
 import Footer from './components/Footer';
+import SideBar from './components/SideBar';
 import useGetUser from './components/useGetUser';
 
 export const getDesignTokens = (mode) => ({
@@ -214,7 +215,7 @@ export const getDesignTokens = (mode) => ({
 export const AppContext = createContext();
 function App() {
   let user = useGetUser();
-  const [language, setLanguage] = useState(localStorage.getItem('language') || '2');
+  const [language, setLanguage] = useState(localStorage.getItem('language') || '1');
   const [darkMode, setDarkMode] = useState(localStorage.getItem('darkMode') || 'dark');
   const theme = createTheme(getDesignTokens(darkMode || 'dark'));
 
@@ -230,9 +231,14 @@ function App() {
           user: user,
         }}
       >
-        <BarMenu />
-        <Outlet />
-        <Footer />
+        <Grid item xs container alignItems="flex-start">
+          <SideBar />
+          <Grid item xs container>
+            <BarMenu />
+            <Outlet />
+            {/* <Footer /> */}
+          </Grid>
+        </Grid>
       </AppContext.Provider>
     </ThemeProvider>
   );

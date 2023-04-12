@@ -10,6 +10,14 @@ import HomePage from './pages/HomePage';
 import SigninPage from './pages/SignInPage';
 import SignUp from './pages/SignUpPage';
 import AdminPage from './pages/AdminPage';
+import CustomersPage from './pages/CustomersPage';
+import PartnersPage from './pages/PartnersPage';
+import NewsPage from './pages/NewsPage';
+import CopartCars from './pages/CopartCars';
+import IaaiCars from './pages/IaaiCars';
+import OnRoad from './pages/OnRoad';
+import InArmeniaCars from './pages/InArmeniaCars';
+import InGeorgiaCars from './pages/InGeorgiaCars';
 
 const router = createBrowserRouter([
   {
@@ -36,6 +44,38 @@ const router = createBrowserRouter([
       {
         path: '/signup',
         element: <SignUp />,
+      },
+      {
+        path: '/customers',
+        element: <CustomersPage />,
+      },
+      {
+        path: '/news',
+        element: <NewsPage />,
+      },
+      {
+        path: '/copart-cars',
+        element: <CopartCars />,
+      },
+      {
+        path: '/iaai-cars',
+        element: <IaaiCars />,
+      },
+      {
+        path: '/in-georgia',
+        element: <InGeorgiaCars />,
+      },
+      {
+        path: '/in-armenia',
+        element: <InArmeniaCars />,
+      },
+      {
+        path: '/on-road',
+        element: <OnRoad />,
+      },
+      {
+        path: '/partners',
+        element: <PartnersPage />,
       },
       {
         path: '/about/asd',

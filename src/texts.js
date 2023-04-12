@@ -1,6 +1,6 @@
 export function getText(text, language, data) {
   if (language === '1') {
-    return data[text].arm;
+    return data[text].am;
   } else if (language === '2') {
     return data[text].en;
   } else {
@@ -10,13 +10,63 @@ export function getText(text, language, data) {
 
 export const barText = {
   home: {
-    arm: 'գլխավոր',
+    am: 'Գլխավոր',
     en: 'home',
     ru: 'главная',
+  },
+  about: {
+    en: 'About',
+    ru: 'О нас',
+    am: 'Մեր մասին',
+  },
+  news: {
+    en: 'News',
+    ru: 'Новости',
+    am: 'Նորություններ',
+  },
+  signIn: {
+    en: 'Sign in',
+    ru: 'Войти',
+    am: 'Մուտք',
+  },
+  signUp: {
+    en: 'Sign up',
+    ru: 'Зарегистрироваться',
+    am: 'Գրանցվել',
   },
 };
 
 export const textSideBar = {
+  home: {
+    am: 'Գլխավոր',
+    en: 'Home',
+    ru: 'Главная',
+  },
+  onRoad: {
+    am: 'Ճանապարհին',
+    en: 'On the raod',
+    ru: 'На дороге',
+  },
+  general: {
+    am: 'Ընդհանուր',
+    en: 'General',
+    ru: 'Общее',
+  },
+  inGeorgia: {
+    am: 'Վրաստանում',
+    en: 'In Georgia',
+    ru: 'В Грузии',
+  },
+  inArmenia: {
+    am: 'Հայաստանում',
+    en: 'In Armenia',
+    ru: 'В Армении',
+  },
+  cars: {
+    am: 'Մեքենաներ',
+    en: 'Autos',
+    ru: 'Автомобили',
+  },
   tyres: {
     en: 'Tyres',
     ru: 'Шины',
