@@ -11,7 +11,9 @@ import {
   ArmFlag,
   CargoIcon,
   CopartIcon,
+  EuropeIcon,
   GBFlag,
+  GeorgianFlag,
   IAAIIcon,
   NewsIcon,
   PartnerIcon,
@@ -30,10 +32,21 @@ const Grid1 = styled(Grid)(({ theme, menulength }) => ({
   borderColor: '#e0e0e0',
   zIndex: 1000,
   overflow: 'scroll',
+  '&::-webkit-scrollbar': {
+    width: '0',
+  },
+  //   '&::-webkit-scrollbar-track': {
+  //     boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+  //     webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+  //   },
+  //   '&::-webkit-scrollbar-thumb': {
+  //     backgroundColor: 'rgba(0,0,0,.1)',
+  //     outline: '1px solid slategrey',
+  //   },
   height: '100vh',
 }));
-const Box1 = styled(Box)(({ theme, menulength }) => ({
-  display: 'flex',
+const Box1 = styled(Box)(({ theme, menulength, hide }) => ({
+  display: hide ? 'none' : 'flex',
   borderColor: '#e0e0e0',
   borderWidth: 1,
   justifyContent: 'center',
@@ -49,7 +62,7 @@ const Box1 = styled(Box)(({ theme, menulength }) => ({
   cursor: 'pointer',
 }));
 
-export default function SideBar({ open, toggleDrawer }) {
+export default function SideBar({ open, toggleDrawer, hide }) {
   const [menuLength, setMenuLength] = useState(true);
   const location = useLocation();
   const context = useContext(AppContext);
@@ -67,7 +80,7 @@ export default function SideBar({ open, toggleDrawer }) {
 
   return (
     <Grid1 sx={{ display: { xs: open, lg: 'flex' } }} menulength={+menuLength}>
-      <Box1 onClick={() => setMenuLength(!menuLength)} menulength={+menuLength}>
+      <Box1 hide={hide} onClick={() => setMenuLength(!menuLength)} menulength={+menuLength}>
         {menuLength ? (
           <ArrowBackIosIcon sx={{ fontSize: '12px', paddingLeft: '4px', color: '#757575' }} />
         ) : (
@@ -106,8 +119,7 @@ export default function SideBar({ open, toggleDrawer }) {
           style={{
             flexDirection: menuLength ? 'row' : 'column',
             justifyContent: 'center',
-            backgroundColor:
-              location.pathname === '/copart-cars' || location.pathname === '/truck-tyres' ? '#e8f5e9' : '',
+            backgroundColor: location.pathname === '/copart-cars' ? '#e8f5e9' : '',
           }}
           className="linko"
           to="/copart-cars"
@@ -118,13 +130,34 @@ export default function SideBar({ open, toggleDrawer }) {
           style={{
             flexDirection: menuLength ? 'row' : 'column',
             justifyContent: 'center',
-            backgroundColor:
-              location.pathname === '/iaai-cars' || location.pathname === '/truck-tyres' ? '#e8f5e9' : '',
+            backgroundColor: location.pathname === '/iaai-cars' ? '#e8f5e9' : '',
           }}
           className="linko"
           to="/iaai-cars"
         >
           <IAAIIcon length={menuLength ? '120px' : '60px'} />
+        </Link>
+
+        <Link
+          style={{
+            flexDirection: menuLength ? 'row' : 'column',
+            backgroundColor: location.pathname === '/europe-cars' ? '#e8f5e9' : '',
+          }}
+          className="linko"
+          to="/europe-cars"
+        >
+          <Box sx={{ padding: '0 15px 0 15px', display: 'flex' }}>
+            <EuropeIcon />
+          </Box>
+          <Typography
+            color={location.pathname === '/europe-cars' ? 'greenCustome.main' : 'neutral.main'}
+            sx={{
+              fontSize: menuLength ? '16px' : '10px',
+              fontWeight: location.pathname === '/europe-cars' ? 500 : 400,
+            }}
+          >
+            Europe
+          </Typography>
         </Link>
         <Link
           style={{
@@ -185,7 +218,7 @@ export default function SideBar({ open, toggleDrawer }) {
           to="/in-georgia"
         >
           <Box sx={{ padding: '0 15px 0 15px', display: 'flex' }}>
-            <GBFlag
+            <GeorgianFlag
               color={
                 context.darkMode === 'light' || location.pathname === '/in-georgia' ? '#34495c ' : '#84ffff'
               }

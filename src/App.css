@@ -1,7 +1,7 @@
 .linko {
   display: flex;
   /* width: 90%; */
-  min-height: 50px;
+  min-height: 40px;
   border-radius: 10px;
   align-items: center;
   text-decoration: none;

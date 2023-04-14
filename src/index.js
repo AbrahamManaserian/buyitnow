@@ -18,6 +18,7 @@ import IaaiCars from './pages/IaaiCars';
 import OnRoad from './pages/OnRoad';
 import InArmeniaCars from './pages/InArmeniaCars';
 import InGeorgiaCars from './pages/InGeorgiaCars';
+import EuropeCars from './pages/EuropeCars';
 
 const router = createBrowserRouter([
   {
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
       {
         path: '/news',
         element: <NewsPage />,
+      },
+      {
+        path: '/europe-cars',
+        element: <EuropeCars />,
       },
       {
         path: '/copart-cars',

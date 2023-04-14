@@ -334,3 +334,11 @@ export const textHomePage = {
     am: 'Լրացուցիչ պարամետրեր',
   },
 };
+
+export const textCopartCars = {
+  cars: {
+    en: 'Cars',
+    ru: 'Автомобили',
+    am: 'Ավտոմեքենաներ',
+  },
+};

@@ -90,54 +90,60 @@ export default function BarMenu() {
       localStorage.setItem('darkMode', 'light');
     }
   };
-  console.log(openDrawer);
   return (
     <Grid
       p="5px 10px 0 0"
       item
       container
       xs={12}
-      justifyContent="flex-end"
       sx={{
+        justifyContent: {
+          xs: 'space-between',
+          sm: 'space-between',
+          md: 'space-between',
+          lg: 'flex-end',
+        },
         position: 'sticky',
         top: 0,
         bgcolor: 'background.default',
         boxShadow: '0 1px 8px -10px rgb(117, 117, 117, 0.1), 0 7px 10px 0 rgb(117, 117, 117, 0.1)',
       }}
     >
-      <Box sx={{ flexGrow: 1, paddingLeft: '5px', display: { xs: 'block', lg: 'none', xl: 'none' } }}>
+      <Box sx={{ paddingLeft: '5px', display: { xs: 'block', lg: 'none', xl: 'none' } }}>
         <FormatListBulletedIcon cursor="pointer" onClick={toggleDrawer(true)} />
       </Box>
       <Drawer anchor="left" open={openDrawer} onClose={toggleDrawer(false)}>
         <div onClick={toggleDrawer(false)} onKeyDown={toggleDrawer(false)}>
-          <SideBar />
+          <SideBar hide={'true'} />
         </div>
       </Drawer>
-      <FlagMenu />
-      <div style={{ cursor: 'pointer', padding: '0 10px 0 10px' }} onClick={handleCLickDarkMode}>
-        {context.darkMode === 'dark' ? (
-          <LightModeOutlinedIcon sx={{ color: 'greenCustome.main' }} />
-        ) : (
-          <DarkModeOutlinedIcon color="success" />
-        )}
-      </div>
+      <Box sx={{ display: 'flex' }}>
+        <FlagMenu />
+        <div style={{ cursor: 'pointer', padding: '0 10px 0 10px' }} onClick={handleCLickDarkMode}>
+          {context.darkMode === 'dark' ? (
+            <LightModeOutlinedIcon sx={{ color: 'greenCustome.main' }} />
+          ) : (
+            <DarkModeOutlinedIcon color="success" />
+          )}
+        </div>
 
-      {context.user ? (
-        <UserMenu />
-      ) : (
-        <Link
-          to={
-            url.pathname.includes('signin') ? url.search : `/signin/?${location.pathname + location.search}`
-          }
-          style={{
-            color: context.darkMode === 'dark' ? '#cfd8dc' : '#546e7a',
-            // padding: '5px',
-            textDecoration: 'none',
-          }}
-        >
-          {getText('signIn', context.language, barText)}
-        </Link>
-      )}
+        {context.user ? (
+          <UserMenu />
+        ) : (
+          <Link
+            to={
+              url.pathname.includes('signin') ? url.search : `/signin/?${location.pathname + location.search}`
+            }
+            style={{
+              color: context.darkMode === 'dark' ? '#cfd8dc' : '#546e7a',
+              // padding: '5px',
+              textDecoration: 'none',
+            }}
+          >
+            {getText('signIn', context.language, barText)}
+          </Link>
+        )}
+      </Box>
     </Grid>
   );
 }
