@@ -97,6 +97,7 @@ export default function BarMenu() {
       container
       xs={12}
       sx={{
+        zIndex: 1000,
         justifyContent: {
           xs: 'space-between',
           sm: 'space-between',

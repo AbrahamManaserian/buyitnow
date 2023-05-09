@@ -30,7 +30,7 @@ const Grid1 = styled(Grid)(({ theme, menulength }) => ({
   borderRightStyle: 'dashed',
   borderWidth: 1,
   borderColor: '#e0e0e0',
-  zIndex: 1000,
+  zIndex: 1500,
   overflow: 'scroll',
   '&::-webkit-scrollbar': {
     width: '0',
@@ -87,7 +87,7 @@ export default function SideBar({ open, toggleDrawer, hide }) {
           <ArrowForwardIosIcon sx={{ fontSize: '12px', paddingLeft: '4px', color: '#757575' }} />
         )}
       </Box1>
-      <Box sx={{ display: 'flex', width: '100%', flexDirection: 'column', overflow: 'hidden' }}>
+      <Box sx={{ display: 'flex', width: '100%', flexDirection: 'column', overflow: 'scroll' }}>
         <Link style={{ textDecoration: 'none', color: 'inherit' }} to="/">
           <Typography
             sx={{
@@ -111,6 +111,7 @@ export default function SideBar({ open, toggleDrawer, hide }) {
           sx={{ textOverflow: 'ellipsis', overflow: 'hidden' }}
           p="20px 0 5px 10px"
           fontSize="12px"
+          minHeight="40px"
           color="primary"
         >
           {getText('cars', context.language, textSideBar)}
