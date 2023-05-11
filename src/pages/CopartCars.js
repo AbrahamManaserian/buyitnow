@@ -1,5 +1,5 @@
 import { Box, Button, Grid, Typography } from '@mui/material';
-import { useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { AppContext } from '../App';
 import CarCard from '../components/CarCard';
 import { CopartIcon } from '../SVGIcons';
@@ -11,10 +11,10 @@ import Image5 from '../images/merc5.jpeg';
 import Image6 from '../images/merc6.jpeg';
 import { getText } from '../texts';
 import { textCopartCars } from '../texts';
-import { Link } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
-import { format } from 'date-fns';
+import { format, formatDistanceToNow, intervalToDuration } from 'date-fns';
 
 const data = [
   {
@@ -72,214 +72,198 @@ const data = [
     highlights: 'Run and Drive',
   },
 ];
-
+export const CarsContext = createContext();
 export default function CopartCars() {
-  const [carsRogue, setCarsRogue] = useState({ cars: [], name: '', lastUpdated: '' });
-  const [carsMercEclass, setCarsMercEclass] = useState({ cars: [], name: '', lastUpdated: '' });
-  const [carsMercCClass, setCarsMercCClass] = useState({ cars: [], name: '', lastUpdated: '' });
-  const [carsJeepCompass, setCarsJeepCompass] = useState({ cars: [], name: '', lastUpdated: '' });
+  let location = useLocation();
+  // console.log(location.search);
   const [carsRogueBuyNow, setCarsRogueBuyNow] = useState({ cars: [], name: '', lastUpdated: '' });
-  // console.log(carsRogue.cars);
+  const [carsMercCBuyNow, setCarsMercCBuyNow] = useState({ cars: [], name: '', lastUpdated: '' });
+  const [carsRogueSportBuyNow, setCarsRogueSportBuyNow] = useState({ cars: [], name: '', lastUpdated: '' });
+
   // console.log(new Date(carsRogue?.lastUpdated.nanoseconds));
   useEffect(() => {
+    // console.log('carsRogue.cars');
     async function getCars() {
-      const docRefRogue = doc(db, 'cars', 'copart', 'Nissan', 'RogueBuyNow');
-      const docRefRogueBuyNow = doc(db, 'cars', 'copart', 'Nissan', 'RogueSportBuyNow');
-      const docRefMercEclass = doc(db, 'cars', 'copart', 'Mercedes', 'EClassBuyNow');
-      const docRefMercCClass = doc(db, 'cars', 'copart', 'Mercedes', 'CClassBuyNow');
-      const docRefJeepCompass = doc(db, 'cars', 'copart', 'Jeep', 'CompartBuyNow');
+      const docRefRogueSportBuyNow = doc(db, 'cars', 'copart', 'Nissan', 'RogueSportBuyNow');
+      const docRefRogueBuyNow = doc(db, 'cars', 'copart', 'Nissan', 'RogueBuyNow');
+      const docRefMercCBuyNow = doc(db, 'cars', 'copart', 'Mercedes', 'CBuyNow');
 
-      const docSnapRogue = await getDoc(docRefRogue);
-      setCarsRogue({
-        cars: Object.values(docSnapRogue.data().data).sort((p1, p2) =>
-          p1.auctionDate1 > p2.auctionDate1 ? 1 : p1.auctionDate1 < p2.auctionDate1 ? -1 : 0
+      const docSnapMercCBuyNow = await getDoc(docRefMercCBuyNow);
+      setCarsMercCBuyNow({
+        cars: Object.values(docSnapMercCBuyNow.data().data).sort((p1, p2) =>
+          +p1.buyNowNumber > +p2.buyNowNumber ? 1 : +p1.buyNowNumber < +p2.buyNowNumber ? -1 : 0
         ),
-        name: docSnapRogue.data().name,
-        lastUpdated: format(docSnapRogue.data().lastUpdated, 'MM/dd/yyyy - H:mm:ss'),
+        name: docSnapMercCBuyNow.data().name,
+        lastUpdated: format(docSnapMercCBuyNow.data().lastUpdated, 'MM/dd/yyyy - H:mm:ss'),
       });
-      // const docSnapRefMercEclass = await getDoc(docRefMercEclass);
-      const docSnapMercCClass = await getDoc(docRefMercCClass);
-      // const docSnapJeepCompass = await getDoc(docRefJeepCompass);
-      // const date = format(docSnapRogue.data().lastUpdated, 'MM/dd/yyyy - H:mm:ss');
-      setCarsMercCClass({
-        cars: Object.values(docSnapMercCClass.data().data).sort((p1, p2) =>
-          p1.auctionDate1 > p2.auctionDate1 ? 1 : p1.auctionDate1 < p2.auctionDate1 ? -1 : 0
-        ),
-        name: docSnapMercCClass.data().name,
-        lastUpdated: format(docSnapMercCClass.data().lastUpdated, 'MM/dd/yyyy - H:mm:ss'),
-      });
-      // setCarsMercEclass({
-      //   cars: Object.values(docSnapRefMercEclass.data().data).sort((p1, p2) =>
-      //     p1.auctionDate1 > p2.auctionDate1 ? 1 : p1.auctionDate1 < p2.auctionDate1 ? -1 : 0
-      //   ),
-      //   name: docSnapRefMercEclass.data().name,
-      //   lastUpdated: format(docSnapRefMercEclass.data().lastUpdated, 'MM/dd/yyyy - H:mm:ss'),
-      // });
-      // setCarsJeepCompass({
-      //   cars: Object.values(docSnapJeepCompass.data().data).sort((p1, p2) =>
-      //     p1.auctionDate1 > p2.auctionDate1 ? 1 : p1.auctionDate1 < p2.auctionDate1 ? -1 : 0
-      //   ),
-      //   name: docSnapJeepCompass.data().name,
-      //   lastUpdated: format(docSnapJeepCompass.data().lastUpdated, 'MM/dd/yyyy - H:mm:ss'),
-      // });
 
       const docSnapRogueBuyNow = await getDoc(docRefRogueBuyNow);
-
       setCarsRogueBuyNow({
         cars: Object.values(docSnapRogueBuyNow.data().data).sort((p1, p2) =>
-          p1.auctionDate1 > p2.auctionDate1 ? 1 : p1.auctionDate1 < p2.auctionDate1 ? -1 : 0
+          +p1.buyNowNumber > +p2.buyNowNumber ? 1 : +p1.buyNowNumber < +p2.buyNowNumber ? -1 : 0
         ),
         name: docSnapRogueBuyNow.data().name,
         lastUpdated: format(docSnapRogueBuyNow.data().lastUpdated, 'MM/dd/yyyy - H:mm:ss'),
+      });
+
+      const docSnapRogueSportBuyNow = await getDoc(docRefRogueSportBuyNow);
+      setCarsRogueSportBuyNow({
+        cars: Object.values(docSnapRogueSportBuyNow.data().data).sort((p1, p2) =>
+          +p1.buyNowNumber > +p2.buyNowNumber ? 1 : +p1.buyNowNumber < +p2.buyNowNumber ? -1 : 0
+        ),
+        name: docSnapRogueSportBuyNow.data().name,
+        lastUpdated: format(docSnapRogueSportBuyNow.data().lastUpdated, 'MM/dd/yyyy - H:mm:ss'),
       });
     }
     getCars();
   }, []);
   const context = useContext(AppContext);
-  // console.log(cars);
   return (
-    <Grid item xs={12} container>
-      <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', py: 2 }}>
-        <CopartIcon />
-        <Typography sx={{ fontSize: '18px' }} marginLeft="10px">
-          {getText('cars', context.language, textCopartCars)} -
-        </Typography>
-        <Link
-          to="/asd"
-          style={{
-            textDecoration: 'none',
-            padding: '0 5px 0 5px',
-            color: 'inherit',
-            fontSize: '18px',
-            marginLeft: '5px',
-          }}
-        >
-          Buy it now
-        </Link>
-      </Box>
+    <CarsContext.Provider
+      value={[...carsRogueBuyNow.cars, ...carsRogueSportBuyNow.cars, ...carsMercCBuyNow.cars]}
+    >
+      <Grid item xs={12} container>
+        <Outlet />
+        {!location.search && (
+          <Grid item xs={12} container>
+            <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', py: 2 }}>
+              <CopartIcon />
+              <Typography sx={{ fontSize: '18px' }} marginLeft="10px">
+                {getText('cars', context.language, textCopartCars)} -
+              </Typography>
+              <Link
+                to="/asd"
+                style={{
+                  textDecoration: 'none',
+                  padding: '0 5px 0 5px',
+                  color: 'inherit',
+                  fontSize: '18px',
+                  marginLeft: '5px',
+                }}
+              >
+                Buy it now
+              </Link>
+            </Box>
 
-      <Grid
-        item
-        container
-        direction="row"
-        m="10px"
-        sx={{ p: { xs: '0 0 0 0', sm: '0 0 0 30px' }, justifyContent: 'center' }}
-      >
-        {carsRogue.cars[0] && (
-          <>
-            <Typography
-              color="primary"
-              sx={{
-                width: '100%',
-                my: '15px',
-                borderBottom: 0.1,
-                fontSize: '16px',
-                fontWeight: 600,
-              }}
+            <Grid
+              item
+              container
+              direction="row"
+              m="10px"
+              sx={{ p: { xs: '0 0 0 0', sm: '0 0 0 30px' }, justifyContent: 'center' }}
             >
-              {carsRogue.name} - {carsRogue.lastUpdated}
-            </Typography>
-            {carsRogue.cars.map((item, index) => {
-              return (
-                <CarCard
-                  key={item.lot}
-                  href={item.href}
-                  price={item.currentBid}
-                  mode={context.darkMode}
-                  name={item.name}
-                  image={item.img}
-                  highlights={item.condition}
-                  damage={item.damage}
-                  // actual={cars[item].damage}
-                  odometer={item.odometer}
-                  buyNow={item.buyNow}
-                />
-              );
-            })}
-          </>
+              {carsMercCBuyNow.cars[0] && (
+                <>
+                  <Typography
+                    color="primary"
+                    sx={{
+                      width: '100%',
+                      my: '15px',
+                      borderBottom: 0.1,
+                      fontSize: '16px',
+                      fontWeight: 600,
+                    }}
+                  >
+                    {carsMercCBuyNow.name} - {carsMercCBuyNow.cars.length} items -{' '}
+                    {carsMercCBuyNow.lastUpdated}
+                  </Typography>
+                  {carsMercCBuyNow.cars.map((item, index) => {
+                    return (
+                      <CarCard
+                        key={item.lot}
+                        lot={item.lot}
+                        auctionDate={item.auctionDate1}
+                        href={item.href}
+                        price={item.currentBid}
+                        mode={context.darkMode}
+                        name={item.name}
+                        image={item.img}
+                        highlights={item.condition}
+                        damage={item.damage}
+                        // actual={cars[item].damage}
+                        odometer={item.odometer}
+                        buyNow={item.buyNow}
+                      />
+                    );
+                  })}
+                </>
+              )}
+              {carsRogueBuyNow.cars[0] && (
+                <>
+                  <Typography
+                    color="primary"
+                    sx={{
+                      width: '100%',
+                      my: '15px',
+                      borderBottom: 0.1,
+                      fontSize: '16px',
+                      fontWeight: 600,
+                    }}
+                  >
+                    {carsRogueBuyNow.name} - {carsRogueBuyNow.cars.length} items -{' '}
+                    {carsRogueBuyNow.lastUpdated}
+                  </Typography>
+                  {carsRogueBuyNow.cars.map((item, index) => {
+                    return (
+                      <CarCard
+                        key={item.lot}
+                        lot={item.lot}
+                        auctionDate={item.auctionDate1}
+                        href={item.href}
+                        price={item.currentBid}
+                        mode={context.darkMode}
+                        name={item.name}
+                        image={item.img}
+                        highlights={item.condition}
+                        damage={item.damage}
+                        // actual={cars[item].damage}
+                        odometer={item.odometer}
+                        buyNow={item.buyNow}
+                      />
+                    );
+                  })}
+                </>
+              )}
+              {carsRogueSportBuyNow.cars[0] && (
+                <>
+                  <Typography
+                    color="primary"
+                    sx={{
+                      width: '100%',
+                      my: '15px',
+                      borderBottom: 0.1,
+                      fontSize: '16px',
+                      fontWeight: 600,
+                    }}
+                  >
+                    {carsRogueSportBuyNow.name} - {carsRogueSportBuyNow.cars.length} items -{' '}
+                    {carsRogueSportBuyNow.lastUpdated}
+                  </Typography>
+                  {carsRogueSportBuyNow.cars.map((item, index) => {
+                    return (
+                      <CarCard
+                        key={item.lot}
+                        lot={item.lot}
+                        auctionDate={item.auctionDate1}
+                        href={item.href}
+                        price={item.currentBid}
+                        mode={context.darkMode}
+                        name={item.name}
+                        image={item.img}
+                        highlights={item.condition}
+                        damage={item.damage}
+                        // actual={cars[item].damage}
+                        odometer={item.odometer}
+                        buyNow={item.buyNow}
+                      />
+                    );
+                  })}
+                </>
+              )}
+            </Grid>
+          </Grid>
         )}
-        {carsMercCClass.cars[0] && (
-          <>
-            <Typography
-              color="primary"
-              sx={{
-                width: '100%',
-                my: '15px',
-                borderBottom: 0.1,
-                fontSize: '16px',
-                fontWeight: 600,
-              }}
-            >
-              {carsMercCClass.name} - {carsMercCClass.lastUpdated}
-            </Typography>
-            {carsMercCClass.cars.map((item, index) => {
-              return (
-                <CarCard
-                  key={item.lot}
-                  href={item.href}
-                  price={item.currentBid}
-                  mode={context.darkMode}
-                  name={item.name}
-                  image={item.img}
-                  highlights={item.condition}
-                  damage={item.damage}
-                  // actual={cars[item].damage}
-                  odometer={item.odometer}
-                  buyNow={item.buyNow}
-                />
-              );
-            })}
-          </>
-        )}
-        {carsRogueBuyNow.cars[0] && (
-          <>
-            <Typography
-              color="primary"
-              sx={{
-                width: '100%',
-                my: '15px',
-                borderBottom: 0.1,
-                fontSize: '16px',
-                fontWeight: 600,
-              }}
-            >
-              {carsRogueBuyNow.name} - {carsRogueBuyNow.lastUpdated}
-            </Typography>
-            {carsRogueBuyNow.cars.map((item, index) => {
-              return (
-                <CarCard
-                  key={item.lot}
-                  href={item.href}
-                  price={item.currentBid}
-                  mode={context.darkMode}
-                  name={item.name}
-                  image={item.img}
-                  highlights={item.condition}
-                  damage={item.damage}
-                  // actual={cars[item].damage}
-                  odometer={item.odometer}
-                  buyNow={item.buyNow}
-                />
-              );
-            })}
-          </>
-        )}
-        {/* {data.map((item, index) => {
-          return (
-            <CarCard
-              key={index}
-              price={item.price}
-              mode={context.darkMode}
-              name={item.name}
-              image={item.image}
-              highlights={item.highlights}
-              damage={item.damage}
-              actual={item.actual}
-              odometer={item.odometer}
-            />
-          );
-        })} */}
       </Grid>
-    </Grid>
+    </CarsContext.Provider>
   );
 }

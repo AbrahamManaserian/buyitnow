@@ -19,6 +19,7 @@ import OnRoad from './pages/OnRoad';
 import InArmeniaCars from './pages/InArmeniaCars';
 import InGeorgiaCars from './pages/InGeorgiaCars';
 import EuropeCars from './pages/EuropeCars';
+import CopartCarPage from './pages/CopartCarPage';
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,12 @@ const router = createBrowserRouter([
       {
         path: '/copart-cars',
         element: <CopartCars />,
+        children: [
+          {
+            path: ':lot',
+            element: <CopartCarPage />,
+          },
+        ],
       },
       {
         path: '/iaai-cars',
