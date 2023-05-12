@@ -24,10 +24,11 @@ export default function CopartCarPage({ carItems }) {
         setImage(filteredItem?.img);
       }
     }
-  }, [cars]);
+  }, [cars, carItems]);
   //   console.log(cars.find((item) => item.lot === url.searchParams.get('lot')));
 
-  console.log(item);
+  //   console.log(item);
+  //   console.log(carItems);
   return (
     <Grid item container xs={12} p={1}>
       <Grid item container xs={12} sm={6}>

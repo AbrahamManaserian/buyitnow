@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Typography } from '@mui/material';
+import { Box, Button, Grid, LinearProgress, Typography } from '@mui/material';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { AppContext } from '../App';
 import CarCard from '../components/CarCard';
@@ -131,25 +131,8 @@ export default function CopartCars() {
         <Outlet />
         {!location.search && (
           <Grid item xs={12} container>
-            <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', py: 2 }}>
-              <CopartIcon />
-              <Typography sx={{ fontSize: '18px' }} marginLeft="10px">
-                {getText('cars', context.language, textCopartCars)} -
-              </Typography>
-              <Link
-                to="/asd"
-                style={{
-                  textDecoration: 'none',
-                  padding: '0 5px 0 5px',
-                  color: 'inherit',
-                  fontSize: '18px',
-                  marginLeft: '5px',
-                }}
-              >
-                Buy it now
-              </Link>
-            </Box>
             <CarInputs auction="copart" />
+            {!carsMercCBuyNow.cars[0] && <LinearProgress sx={{ width: '100%', mx: 5 }} color="primary" />}
             <Grid
               item
               container

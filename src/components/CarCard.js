@@ -122,6 +122,8 @@ export default function CarCard({
           </Typography>
           <Typography
             sx={{
+              height: '20px',
+              overflow: 'hidden',
               fontSize: '14px',
               fontWeight: 500,
             }}
