@@ -11,10 +11,15 @@ import Image5 from '../images/merc5.jpeg';
 import Image6 from '../images/merc6.jpeg';
 import { getText } from '../texts';
 import { textCopartCars } from '../texts';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { format, formatDistanceToNow, intervalToDuration } from 'date-fns';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import { CarInputs } from '../components/CarInputs';
 
 const data = [
   {
@@ -144,7 +149,7 @@ export default function CopartCars() {
                 Buy it now
               </Link>
             </Box>
-
+            <CarInputs auction="copart" />
             <Grid
               item
               container
@@ -170,6 +175,7 @@ export default function CopartCars() {
                   {carsMercCBuyNow.cars.map((item, index) => {
                     return (
                       <CarCard
+                        url="/copart-cars/search?"
                         key={item.lot}
                         lot={item.lot}
                         auctionDate={item.auctionDate1}
@@ -206,6 +212,7 @@ export default function CopartCars() {
                   {carsRogueBuyNow.cars.map((item, index) => {
                     return (
                       <CarCard
+                        url="/copart-cars/search?"
                         key={item.lot}
                         lot={item.lot}
                         auctionDate={item.auctionDate1}
@@ -244,6 +251,7 @@ export default function CopartCars() {
                       <CarCard
                         key={item.lot}
                         lot={item.lot}
+                        url="/copart-cars/search?"
                         auctionDate={item.auctionDate1}
                         href={item.href}
                         price={item.currentBid}

@@ -20,6 +20,7 @@ import InArmeniaCars from './pages/InArmeniaCars';
 import InGeorgiaCars from './pages/InGeorgiaCars';
 import EuropeCars from './pages/EuropeCars';
 import CopartCarPage from './pages/CopartCarPage';
+import SearchPage from './pages/SearchPage';
 
 const router = createBrowserRouter([
   {
@@ -62,6 +63,16 @@ const router = createBrowserRouter([
       {
         path: '/copart-cars',
         element: <CopartCars />,
+        children: [
+          {
+            path: ':lot',
+            element: <CopartCarPage />,
+          },
+        ],
+      },
+      {
+        path: '/search',
+        element: <SearchPage />,
         children: [
           {
             path: ':lot',

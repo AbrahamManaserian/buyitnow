@@ -14,6 +14,7 @@ export default function CarCard({
   odometer,
   buyNow,
   auctionDate,
+  url,
 }) {
   const cheCkHighlights = highlights === 'Run and Drive Icon' ? 'R' : 'E';
   const date = intervalToDuration({
@@ -23,7 +24,7 @@ export default function CarCard({
   // console.log(date);
   return (
     <Box sx={{ width: { xs: '50%', sm: '250px' }, p: '5px' }}>
-      <Link to={`/copart-cars/search?lot=${lot}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+      <Link to={`${url}lot=${lot}`} style={{ textDecoration: 'none', color: 'inherit' }}>
         <Grid
           sx={{
             width: { xs: '100%', sm: '230px' },

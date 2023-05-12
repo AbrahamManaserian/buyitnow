@@ -2,22 +2,32 @@ import { useLocation, useParams } from 'react-router-dom';
 import { CarsContext } from './CopartCars';
 import { useContext, useEffect, useState } from 'react';
 import { Grid, Typography } from '@mui/material';
+import { format } from 'date-fns';
 
-export default function CopartCarPage() {
+export default function CopartCarPage({ carItems }) {
+  // console.log(format(Date.now(), 'MM/dd/yyyy - H:mm:ss'));
   const url = new URL(window.location.href);
   const [item, setItem] = useState({});
   const [image, setImage] = useState('');
   const cars = useContext(CarsContext);
   useEffect(() => {
-    const filteredItem = cars.find((item) => item.lot === url.searchParams.get('lot'));
-    if (filteredItem) {
-      setItem(filteredItem);
-      setImage(filteredItem?.img);
+    if (!carItems) {
+      const filteredItem = cars.find((item) => item.lot === url.searchParams.get('lot'));
+      if (filteredItem) {
+        setItem(filteredItem);
+        setImage(filteredItem?.img);
+      }
+    } else {
+      const filteredItem = carItems.find((item) => item.lot === url.searchParams.get('lot'));
+      if (filteredItem) {
+        setItem(filteredItem);
+        setImage(filteredItem?.img);
+      }
     }
   }, [cars]);
   //   console.log(cars.find((item) => item.lot === url.searchParams.get('lot')));
 
-  //   console.log(item);
+  console.log(item);
   return (
     <Grid item container xs={12} p={1}>
       <Grid item container xs={12} sm={6}>
