@@ -94,31 +94,36 @@ export default function CopartCars() {
       const docRefMercCBuyNow = doc(db, 'cars', 'copart', 'Mercedes', 'CBuyNow');
 
       const docSnapMercCBuyNow = await getDoc(docRefMercCBuyNow);
-      setCarsMercCBuyNow({
-        cars: Object.values(docSnapMercCBuyNow.data().data).sort((p1, p2) =>
-          +p1.buyNowNumber > +p2.buyNowNumber ? 1 : +p1.buyNowNumber < +p2.buyNowNumber ? -1 : 0
-        ),
-        name: docSnapMercCBuyNow.data().name,
-        lastUpdated: format(docSnapMercCBuyNow.data().lastUpdated, 'MM/dd/yyyy - H:mm:ss'),
-      });
+      if (docSnapMercCBuyNow.data()) {
+        setCarsMercCBuyNow({
+          cars: Object.values(docSnapMercCBuyNow.data().data).sort((p1, p2) =>
+            +p1.buyNowNumber > +p2.buyNowNumber ? 1 : +p1.buyNowNumber < +p2.buyNowNumber ? -1 : 0
+          ),
+          name: docSnapMercCBuyNow.data().name,
+          lastUpdated: format(docSnapMercCBuyNow.data().lastUpdated, 'MM/dd/yyyy - H:mm:ss'),
+        });
+      }
 
       const docSnapRogueBuyNow = await getDoc(docRefRogueBuyNow);
-      setCarsRogueBuyNow({
-        cars: Object.values(docSnapRogueBuyNow.data().data).sort((p1, p2) =>
-          +p1.buyNowNumber > +p2.buyNowNumber ? 1 : +p1.buyNowNumber < +p2.buyNowNumber ? -1 : 0
-        ),
-        name: docSnapRogueBuyNow.data().name,
-        lastUpdated: format(docSnapRogueBuyNow.data().lastUpdated, 'MM/dd/yyyy - H:mm:ss'),
-      });
-
+      if (docSnapRogueBuyNow.data()) {
+        setCarsRogueBuyNow({
+          cars: Object.values(docSnapRogueBuyNow.data().data).sort((p1, p2) =>
+            +p1.buyNowNumber > +p2.buyNowNumber ? 1 : +p1.buyNowNumber < +p2.buyNowNumber ? -1 : 0
+          ),
+          name: docSnapRogueBuyNow.data().name,
+          lastUpdated: format(docSnapRogueBuyNow.data().lastUpdated, 'MM/dd/yyyy - H:mm:ss'),
+        });
+      }
       const docSnapRogueSportBuyNow = await getDoc(docRefRogueSportBuyNow);
-      setCarsRogueSportBuyNow({
-        cars: Object.values(docSnapRogueSportBuyNow.data().data).sort((p1, p2) =>
-          +p1.buyNowNumber > +p2.buyNowNumber ? 1 : +p1.buyNowNumber < +p2.buyNowNumber ? -1 : 0
-        ),
-        name: docSnapRogueSportBuyNow.data().name,
-        lastUpdated: format(docSnapRogueSportBuyNow.data().lastUpdated, 'MM/dd/yyyy - H:mm:ss'),
-      });
+      if (docSnapRogueSportBuyNow.data()) {
+        setCarsRogueSportBuyNow({
+          cars: Object.values(docSnapRogueSportBuyNow.data().data).sort((p1, p2) =>
+            +p1.buyNowNumber > +p2.buyNowNumber ? 1 : +p1.buyNowNumber < +p2.buyNowNumber ? -1 : 0
+          ),
+          name: docSnapRogueSportBuyNow.data().name,
+          lastUpdated: format(docSnapRogueSportBuyNow.data().lastUpdated, 'MM/dd/yyyy - H:mm:ss'),
+        });
+      }
     }
     getCars();
   }, []);
@@ -132,7 +137,14 @@ export default function CopartCars() {
         {!location.search && (
           <Grid item xs={12} container>
             <CarInputs auction="copart" />
-            {!carsMercCBuyNow.cars[0] && <LinearProgress sx={{ width: '100%', mx: 5 }} color="primary" />}
+            <LinearProgress
+              sx={{
+                width: '100%',
+                mx: { xs: '8px', sm: '25px' },
+                visibility: carsMercCBuyNow.cars[0] ? 'hidden' : '',
+              }}
+              color="primary"
+            />
             <Grid
               item
               container

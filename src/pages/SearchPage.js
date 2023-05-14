@@ -98,13 +98,17 @@ export default function SearchPage() {
       );
 
       const docSnap = await getDoc(docRef);
-      setCars({
-        cars: Object.values(docSnap.data().data).sort((p1, p2) =>
-          +p1.buyNowNumber > +p2.buyNowNumber ? 1 : +p1.buyNowNumber < +p2.buyNowNumber ? -1 : 0
-        ),
-        name: docSnap.data().name,
-        lastUpdated: format(docSnap.data().lastUpdated, 'MM/dd/yyyy - H:mm:ss'),
-      });
+      if (docSnap.data()) {
+        setCars({
+          cars: Object.values(docSnap.data().data).sort((p1, p2) =>
+            +p1.buyNowNumber > +p2.buyNowNumber ? 1 : +p1.buyNowNumber < +p2.buyNowNumber ? -1 : 0
+          ),
+          name: docSnap.data().name,
+          lastUpdated: format(docSnap.data().lastUpdated, 'MM/dd/yyyy - H:mm:ss'),
+        });
+      } else {
+        setFilteredCars({ cars: ['none'], name: '', lastUpdated: '' });
+      }
       setSortBy('Buy It Now');
     }
     getCars();
@@ -183,7 +187,14 @@ export default function SearchPage() {
           <Grid item xs={12} container>
             <CarInputs auction="copart" />
 
-            {!cars.cars[0] && <LinearProgress sx={{ width: '100%', mx: 5 }} color="primary" />}
+            <LinearProgress
+              sx={{
+                width: '100%',
+                mx: { xs: '8px', sm: '25px' },
+                visibility: filteredCars.cars[0] ? 'hidden' : '',
+              }}
+              color="primary"
+            />
 
             <Grid
               xs
@@ -196,15 +207,15 @@ export default function SearchPage() {
               <Box
                 onClick={() => setDrawer(true)}
                 sx={{
-                  pr: { xs: 0, sm: '20px' },
+                  pr: { xs: 0, sm: '23px' },
                   position: 'absolute',
                   right: '12px',
-                  top: '170px',
+                  top: '180px',
                   cursor: 'pointer',
                   display: { xs: 'block', sm: 'block', md: 'block', lg: 'none' },
                 }}
               >
-                <SettingsIcon />
+                Filters <SettingsIcon />
               </Box>
               {filteredCars.cars[0] && filteredCars.cars[0] !== 'none' && (
                 <>
@@ -215,7 +226,7 @@ export default function SearchPage() {
                       alignItems: 'flex-end',
                       justifyContent: 'space-between',
                       borderBottom: 0.1,
-                      pt: { xs: 0, sm: '20px' },
+                      pt: { xs: 0, sm: '24px' },
                       pb: '5px',
                     }}
                   >
@@ -269,7 +280,7 @@ export default function SearchPage() {
                   })}
                 </>
               )}
-              {filteredCars.cars[0] === 'none' && 'No Item'}
+              {filteredCars.cars[0] === 'none' && 'No Items'}
             </Grid>
             <Drawer anchor="bottom" open={drawer} onClose={() => setDrawer(false)}>
               <Box

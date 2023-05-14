@@ -53,6 +53,10 @@ export default function Filter({
     setDamage(url.searchParams.get('damage')?.split(',') || []);
     setCylinder(url.searchParams.get('cylinders')?.split(',') || []);
     setHighlights(url.searchParams.get('highlights')?.split(',') || []);
+    setOdometer({
+      from: url.searchParams.get('odometerfrom') || '',
+      to: url.searchParams.get('odometerto') || '',
+    });
   }, [location.search]);
   const handleChange = (event) => {
     if (event.target.name === 'year') {

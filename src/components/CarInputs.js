@@ -35,6 +35,48 @@ const makes = {
       },
     ],
   },
+  Bmw: {
+    name: 'BMW',
+    models: [
+      {
+        name: '7 Series',
+        fetchName: '7',
+      },
+      {
+        name: '5 Series',
+        fetchName: '5',
+      },
+      {
+        name: '3 Series',
+        fetchName: '3',
+      },
+      {
+        name: 'X3',
+        fetchName: 'x3',
+      },
+      {
+        name: 'X5',
+        fetchName: 'x5',
+      },
+      {
+        name: 'X6',
+        fetchName: 'x6',
+      },
+    ],
+  },
+  Toyota: {
+    name: 'Toyota',
+    models: [
+      {
+        name: 'Camry',
+        fetchName: 'Camry',
+      },
+      {
+        name: 'Corolla',
+        fetchName: 'Corolla',
+      },
+    ],
+  },
   Nissan: {
     name: 'Nissan',
     models: [
@@ -55,10 +97,45 @@ const makes = {
         name: 'Compass',
         fetchName: 'Compass',
       },
-      //   {
-      //     name: 'Rogue Sport',
-      //     fetchName: 'RogueSportBuyNow',
-      //   },
+    ],
+  },
+  Kia: {
+    name: 'Kia',
+    models: [
+      {
+        name: 'Optima',
+        fetchName: 'Optima',
+      },
+      {
+        name: 'Rio',
+        fetchName: 'Rio',
+      },
+      {
+        name: 'Forte',
+        fetchName: 'Forte',
+      },
+      {
+        name: 'Sorento',
+        fetchName: 'Sorento',
+      },
+    ],
+  },
+  Hyundai: {
+    name: 'Hyundai',
+    models: [
+      {
+        name: 'Sonata',
+        fetchName: 'Sonata',
+      },
+    ],
+  },
+  Honda: {
+    name: 'Honda',
+    models: [
+      {
+        name: 'Accord',
+        fetchName: 'Accord',
+      },
     ],
   },
 };
