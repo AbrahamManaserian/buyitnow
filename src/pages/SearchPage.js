@@ -29,7 +29,7 @@ export default function SearchPage() {
   let [searchParams, setSearchParams] = useSearchParams();
   const [filteredCars, setFilteredCars] = useState({ cars: [], name: '', lastUpdated: '' });
   const [cars, setCars] = useState({ cars: [], name: '', lastUpdated: '' });
-  const [sortBy, setSortBy] = useState('Price');
+  const [sortBy, setSortBy] = useState('Buy It Now');
   const [drawer, setDrawer] = useState(false);
   let location = useLocation();
   const navigate = useNavigate();
@@ -105,6 +105,7 @@ export default function SearchPage() {
         name: docSnap.data().name,
         lastUpdated: format(docSnap.data().lastUpdated, 'MM/dd/yyyy - H:mm:ss'),
       });
+      setSortBy('Buy It Now');
     }
     getCars();
   }, [searchParams.get('make'), searchParams.get('model')]);
