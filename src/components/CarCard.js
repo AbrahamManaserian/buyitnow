@@ -1,5 +1,5 @@
 import { Box, Button, Grid, Typography } from '@mui/material';
-import { intervalToDuration } from 'date-fns';
+import { format, formatDistance, formatDistanceToNow, intervalToDuration } from 'date-fns';
 import { Link } from 'react-router-dom';
 
 export default function CarCard({
@@ -15,15 +15,34 @@ export default function CarCard({
   buyNow,
   auctionDate,
   url,
+  creationDate,
 }) {
   const cheCkHighlights = highlights === 'Run and Drive Icon' ? 'R' : 'E';
   const date = intervalToDuration({
     start: new Date(),
     end: new Date(auctionDate),
   });
-  // console.log(date);
+  const dateDistance = +format(new Date(), 'd') - +format(new Date(creationDate), 'd');
+  // console.log(dateDistance);
   return (
-    <Box sx={{ width: { xs: '50%', sm: '250px' }, p: '5px' }}>
+    <Box sx={{ width: { xs: '50%', sm: '250px' }, p: '5px', position: 'relative' }}>
+      <Typography
+        sx={{
+          position: 'absolute',
+          top: '13px',
+          right: '23px',
+          zIndex: 1,
+          bgcolor: 'red',
+          borderRadius: '25px',
+          px: '5px',
+          fontSize: '13px',
+          fontWeight: 600,
+          color: 'white',
+          visibility: dateDistance > 1 ? 'hidden' : '',
+        }}
+      >
+        New
+      </Typography>
       <Link to={`${url}lot=${lot}`} style={{ textDecoration: 'none', color: 'inherit' }}>
         <Grid
           sx={{
@@ -92,14 +111,17 @@ export default function CarCard({
               {cheCkHighlights}
             </Typography>
           </Box>
+          <Typography color="error" sx={{ fontSize: '13px', fontWeight: 500 }}>
+            Added{' '}
+            {/* {formatDistance(new Date(creationDate), new Date(), {
+              addSuffix: true,
+            })} */}
+            {formatDistanceToNow(new Date(creationDate), { addSuffix: true })}
+          </Typography>
           <Box sx={{ display: 'flex' }}>
             <Typography
               sx={{
                 fontSize: '12px',
-                // p: '0 5px 0 5px',
-                // m: '5px 0 8px 2px',
-                // bgcolor: cheCkHighlights === 'E' ? '#80deea' : '#9ccc65',
-                // borderRadius: '50%',
               }}
             >
               Lot#

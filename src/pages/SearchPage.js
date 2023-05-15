@@ -275,6 +275,7 @@ export default function SearchPage() {
                         // actual={cars[item].damage}
                         odometer={item.odometer}
                         buyNow={item.buyNow}
+                        creationDate={item.detail.creationDate}
                       />
                     );
                   })}

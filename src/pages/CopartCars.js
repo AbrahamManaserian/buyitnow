@@ -128,6 +128,11 @@ export default function CopartCars() {
     getCars();
   }, []);
   const context = useContext(AppContext);
+  // if (carsRogueBuyNow.cars[0]) {
+  //   let asd = +format(new Date(), 'd') - +format(new Date(carsRogueBuyNow.cars[0]?.detail.creationDate), 'd');
+  //   console.log(asd);
+  //   console.log(formatDistanceToNow(new Date(carsRogueBuyNow.cars[0]?.detail.creationDate)));
+  // }
   return (
     <CarsContext.Provider
       value={[...carsRogueBuyNow.cars, ...carsRogueSportBuyNow.cars, ...carsMercCBuyNow.cars]}
@@ -152,117 +157,126 @@ export default function CopartCars() {
               m="10px"
               sx={{ p: { xs: '0 0 0 0', sm: '0 0 0 30px' }, justifyContent: 'center' }}
             >
-              {carsMercCBuyNow.cars[0] && (
-                <>
-                  <Typography
-                    color="primary"
-                    sx={{
-                      width: '100%',
-                      my: '15px',
-                      borderBottom: 0.1,
-                      fontSize: '16px',
-                      fontWeight: 600,
-                    }}
-                  >
-                    {carsMercCBuyNow.name} - {carsMercCBuyNow.cars.length} items -{' '}
-                    {carsMercCBuyNow.lastUpdated}
-                  </Typography>
-                  {carsMercCBuyNow.cars.map((item, index) => {
-                    return (
-                      <CarCard
-                        url="/copart-cars/search?"
-                        key={item.lot}
-                        lot={item.lot}
-                        auctionDate={item.auctionDate1}
-                        href={item.href}
-                        price={item.currentBid}
-                        mode={context.darkMode}
-                        name={item.name}
-                        image={item.img}
-                        highlights={item.condition}
-                        damage={item.damage}
-                        // actual={cars[item].damage}
-                        odometer={item.odometer}
-                        buyNow={item.buyNow}
-                      />
-                    );
-                  })}
-                </>
-              )}
-              {carsRogueBuyNow.cars[0] && (
-                <>
-                  <Typography
-                    color="primary"
-                    sx={{
-                      width: '100%',
-                      my: '15px',
-                      borderBottom: 0.1,
-                      fontSize: '16px',
-                      fontWeight: 600,
-                    }}
-                  >
-                    {carsRogueBuyNow.name} - {carsRogueBuyNow.cars.length} items -{' '}
-                    {carsRogueBuyNow.lastUpdated}
-                  </Typography>
-                  {carsRogueBuyNow.cars.map((item, index) => {
-                    return (
-                      <CarCard
-                        url="/copart-cars/search?"
-                        key={item.lot}
-                        lot={item.lot}
-                        auctionDate={item.auctionDate1}
-                        href={item.href}
-                        price={item.currentBid}
-                        mode={context.darkMode}
-                        name={item.name}
-                        image={item.img}
-                        highlights={item.condition}
-                        damage={item.damage}
-                        // actual={cars[item].damage}
-                        odometer={item.odometer}
-                        buyNow={item.buyNow}
-                      />
-                    );
-                  })}
-                </>
-              )}
-              {carsRogueSportBuyNow.cars[0] && (
-                <>
-                  <Typography
-                    color="primary"
-                    sx={{
-                      width: '100%',
-                      my: '15px',
-                      borderBottom: 0.1,
-                      fontSize: '16px',
-                      fontWeight: 600,
-                    }}
-                  >
-                    {carsRogueSportBuyNow.name} - {carsRogueSportBuyNow.cars.length} items -{' '}
-                    {carsRogueSportBuyNow.lastUpdated}
-                  </Typography>
-                  {carsRogueSportBuyNow.cars.map((item, index) => {
-                    return (
-                      <CarCard
-                        key={item.lot}
-                        lot={item.lot}
-                        url="/copart-cars/search?"
-                        auctionDate={item.auctionDate1}
-                        href={item.href}
-                        price={item.currentBid}
-                        mode={context.darkMode}
-                        name={item.name}
-                        image={item.img}
-                        highlights={item.condition}
-                        damage={item.damage}
-                        // actual={cars[item].damage}
-                        odometer={item.odometer}
-                        buyNow={item.buyNow}
-                      />
-                    );
-                  })}
-                </>
-              )}
+              <>
+                {carsMercCBuyNow.cars[0] && (
+                  <>
+                    <Typography
+                      color="primary"
+                      sx={{
+                        width: '100%',
+                        my: '15px',
+                        borderBottom: 0.1,
+                        fontSize: '16px',
+                        fontWeight: 600,
+                      }}
+                    >
+                      {carsMercCBuyNow.name} - {carsMercCBuyNow.cars.length} items -{' '}
+                      {carsMercCBuyNow.lastUpdated}
+                    </Typography>
+                    {carsMercCBuyNow.cars.map((item, index) => {
+                      return (
+                        <CarCard
+                          url="/copart-cars/search?"
+                          key={item.lot}
+                          lot={item.lot}
+                          auctionDate={item.auctionDate1}
+                          href={item.href}
+                          price={item.currentBid}
+                          mode={context.darkMode}
+                          name={item.name}
+                          image={item.img}
+                          highlights={item.condition}
+                          damage={item.damage}
+                          // actual={cars[item].damage}
+                          odometer={item.odometer}
+                          buyNow={item.buyNow}
+                          creationDate={item.detail.creationDate}
+                        />
+                      );
+                    })}
+                  </>
+                )}
+              </>
+              <>
+                {carsRogueBuyNow.cars[0] && (
+                  <>
+                    <Typography
+                      color="primary"
+                      sx={{
+                        width: '100%',
+                        my: '15px',
+                        borderBottom: 0.1,
+                        fontSize: '16px',
+                        fontWeight: 600,
+                      }}
+                    >
+                      {carsRogueBuyNow.name} - {carsRogueBuyNow.cars.length} items -{' '}
+                      {carsRogueBuyNow.lastUpdated}
+                    </Typography>
+                    {carsRogueBuyNow.cars.map((item, index) => {
+                      return (
+                        <CarCard
+                          url="/copart-cars/search?"
+                          key={item.lot}
+                          lot={item.lot}
+                          auctionDate={item.auctionDate1}
+                          href={item.href}
+                          price={item.currentBid}
+                          mode={context.darkMode}
+                          name={item.name}
+                          image={item.img}
+                          highlights={item.condition}
+                          damage={item.damage}
+                          // actual={cars[item].damage}
+                          odometer={item.odometer}
+                          buyNow={item.buyNow}
+                          creationDate={item.detail.creationDate}
+                        />
+                      );
+                    })}
+                  </>
+                )}
+              </>
+              <>
+                {carsRogueSportBuyNow.cars[0] && (
+                  <>
+                    <Typography
+                      color="primary"
+                      sx={{
+                        width: '100%',
+                        my: '15px',
+                        borderBottom: 0.1,
+                        fontSize: '16px',
+                        fontWeight: 600,
+                      }}
+                    >
+                      {carsRogueSportBuyNow.name} - {carsRogueSportBuyNow.cars.length} items -{' '}
+                      {carsRogueSportBuyNow.lastUpdated}
+                    </Typography>
+                    {carsRogueSportBuyNow.cars.map((item, index) => {
+                      return (
+                        <CarCard
+                          key={item.lot}
+                          lot={item.lot}
+                          url="/copart-cars/search?"
+                          auctionDate={item.auctionDate1}
+                          href={item.href}
+                          price={item.currentBid}
+                          mode={context.darkMode}
+                          name={item.name}
+                          image={item.img}
+                          highlights={item.condition}
+                          damage={item.damage}
+                          // actual={cars[item].damage}
+                          odometer={item.odometer}
+                          buyNow={item.buyNow}
+                          creationDate={item.detail.creationDate}
+                        />
+                      );
+                    })}
+                  </>
+                )}
+              </>
             </Grid>
           </Grid>
         )}
