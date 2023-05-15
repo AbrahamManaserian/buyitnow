@@ -84,7 +84,7 @@ export default function CopartCarPage({ carItems }) {
   return (
     <>
       {item.detail && (
-        <Grid item container xs={12} p={1}>
+        <Grid item container xs={12} p={2}>
           <Grid item xs={12} container flexWrap={true} pb={1}>
             <Box sx={{ display: 'flex', alignItems: 'flex-end', width: '100%' }}>
               <Typography sx={{ fontWeight: 700, fontSize: { xs: '19px', sm: '25px' } }}>
@@ -240,7 +240,7 @@ export default function CopartCarPage({ carItems }) {
             alignContent="flex-start"
             px={{ xs: 0, sm: 2, md: 4 }}
           >
-            <Box sx={{ width: '100%', maxWidth: 360 }}>
+            <Box sx={{ width: '100%', maxWidth: { xs: '100%', sm: 360 } }}>
               <nav aria-label="main mailbox folders">
                 <List>
                   <ListItem disablePadding>
