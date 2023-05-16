@@ -30,7 +30,7 @@ export default function CarCard({
         sx={{
           position: 'absolute',
           top: '13px',
-          right: '23px',
+          right: { xs: '13px', sm: '23px' },
           zIndex: 1,
           bgcolor: 'red',
           borderRadius: '25px',
@@ -64,7 +64,7 @@ export default function CarCard({
           <Box
             sx={{
               display: 'flex',
-              height: { xs: '126px', sm: '170px' },
+              height: { xs: '136px', sm: '170px' },
               overflow: 'hidden',
               alignContent: 'flex-start',
               justifyContent: 'center',
@@ -72,10 +72,7 @@ export default function CarCard({
               borderRadius: '7px',
             }}
           >
-            <img
-              src={image}
-              style={{ width: '100%', maxWidth: '222px', height: '100%', borderRadius: '7px' }}
-            />
+            <img src={image} style={{ width: '100%', height: 'auto', borderRadius: '7px' }} />
           </Box>
           <Box
             sx={{
