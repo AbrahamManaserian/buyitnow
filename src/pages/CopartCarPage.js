@@ -1,7 +1,21 @@
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { CarsContext } from './CopartCars';
 import { useContext, useEffect, useState } from 'react';
-import { Box, Divider, Grid, Paper, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Collapse,
+  Divider,
+  FormControl,
+  FormHelperText,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { format, intervalToDuration } from 'date-fns';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { BackIcon, ForwardIcon } from '../SVGIcons';
@@ -13,32 +27,12 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/Inbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
+import calculateClearanceFee from '../calculateClearanceFee';
+import { ExpandLess, ExpandMore, StarBorder } from '@mui/icons-material';
 
-export function BasicList() {
-  return (
-    <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-      <nav aria-label="main mailbox folders">
-        <List>
-          <ListItem
-            disablePadding
-            secondaryAction={
-              <Typography edge="end" aria-label="comments">
-                Abraha,
-              </Typography>
-            }
-          >
-            <ListItemIcon>
-              <InboxIcon />
-            </ListItemIcon>
-            <ListItemText primary="Inbox" />
-          </ListItem>
-          <Divider />
-        </List>
-      </nav>
-      <Divider />
-    </Box>
-  );
-}
+// console.log(calculateClearanceFee(2017, 7, 10000, 2.5, 2000, 1.0893));
+const years = [2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016];
+const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 export default function CopartCarPage({ carItems }) {
   // console.log(format(Date.now(), 'MM/dd/yyyy - H:mm:ss'));
   const url = new URL(window.location.href);
@@ -46,6 +40,40 @@ export default function CopartCarPage({ carItems }) {
   const [image, setImage] = useState('');
   const cars = useContext(CarsContext);
   const [date, setDate] = useState({});
+  const [yearMonth, setYearMonth] = useState({ year: '', month: '' });
+  const [openCloapse, setOpenColapse] = useState(false);
+  const [calculation, setCalculation] = useState({
+    fee: 0,
+    max: 0,
+    AAH: 0,
+    clearance: 0,
+    shipment: 0,
+    carPrice: 0,
+    total: 0,
+  });
+  useEffect(() => {
+    if (item.name) {
+      const obj = calculateClearanceFee(
+        +item.name.slice(1, 5),
+        12,
+        +item.buyNowNumber,
+        +item.detail.engine.slice(0, 3) || 1.1,
+        item.location,
+        1.0893
+      );
+      setCalculation({
+        fee: obj.fob,
+        max: obj.max,
+        AAH: obj.AAH,
+        nature: obj.nature,
+        clearance: obj.clearance,
+        shipment: obj.shipment,
+        carPrice: item.buyNowNumber,
+        total: obj.shipment + +item.buyNowNumber + obj.clearance + obj.fob + 500,
+      });
+      setYearMonth({ year: +item.name.slice(1, 5), month: 12 });
+    }
+  }, [item]);
   useEffect(() => {
     if (!carItems) {
       const filteredItem = cars.find((item) => item.lot === url.searchParams.get('lot'));
@@ -75,7 +103,36 @@ export default function CopartCarPage({ carItems }) {
       }
     }
   }, [cars, carItems]);
-  console.log(item);
+
+  const handleCorrectDate = () => {
+    const obj = calculateClearanceFee(
+      yearMonth.year,
+      yearMonth.month,
+      +item.buyNowNumber,
+      +item.detail.engine.slice(0, 3) || 1.1,
+      item.location,
+      1.0893
+    );
+    setCalculation({
+      fee: obj.fob,
+      max: obj.max,
+      AAH: obj.AAH,
+      nature: obj.nature,
+      clearance: obj.clearance,
+      shipment: obj.shipment,
+      carPrice: item.buyNowNumber,
+      total: obj.shipment + +item.buyNowNumber + obj.clearance + obj.fob + 500,
+    });
+    setOpenColapse(false);
+  };
+  const handleChangeYearMonth = (e) => {
+    if (e.target.name === 'year') {
+      setYearMonth({ ...yearMonth, year: e.target.value });
+    } else {
+      setYearMonth({ ...yearMonth, month: e.target.value });
+    }
+  };
+
   const handleClickImage = (name) => {
     if (name === 'back') {
       if (item.detail.imgs.hd.indexOf(image) === -1 || item.detail.imgs.hd.indexOf(image) === 0) {
@@ -257,63 +314,154 @@ export default function CopartCarPage({ carItems }) {
                     borderRadius: '3px 3px 0 0',
                     width: '100%',
                     bgcolor: 'success.main',
-                    // m: '-8px 0 0 -8px',
                     p: '8px',
                   }}
                 >
                   <Typography sx={{ fontWeight: 700, color: 'white' }}>Calculation To Armenia</Typography>
                 </Box>
-                <Grid p={2} item xs={12} container>
-                  <Grid item xs={6} direction="column" container pr={{ xs: 1, sm: 3 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', py: '4px' }}>
-                      <Typography>Car Price -</Typography>
-                      <Typography sx={{ fontWeight: 500, pl: '2px' }}>{item.buyNow.slice(1)}$</Typography>
-                    </Box>
-                    <Divider sx={{ width: '100%' }} />
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', py: '4px' }}>
-                      <Typography>Fob -</Typography>
-                      <Typography sx={{ fontWeight: 500, pl: '2px' }}>1,000$</Typography>
-                    </Box>
-                    <Divider sx={{ width: '100%' }} />
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', py: '4px' }}>
-                      <Typography>Shipment -</Typography>
-                      <Typography sx={{ fontWeight: 500, pl: '2px' }}>2,500$</Typography>
-                    </Box>
-                    <Divider sx={{ width: '100%' }} />
-                    <Box sx={{ display: 'flex', flexDirection: 'column', py: '4px' }}>
-                      <Typography sx={{ fontSize: '14px', fontWeight: 700 }}>Customs clearance:</Typography>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', py: '4px' }}>
-                        <Typography>AAH -</Typography>
-                        <Typography sx={{ fontWeight: 500, pl: '2px' }}>6,500$</Typography>
+                <Grid p={{ xs: 1, sm: 2 }} item xs={12} container>
+                  <Grid item xs={12} sm={6} direction="column" container pr={{ xs: 1, sm: 3 }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                      <Typography sx={{ fontSize: '15px', fontWeight: 700 }}>Vehicle:</Typography>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '2px 0 2px 9px' }}>
+                        <Typography sx={{ fontSize: '14px' }}>Car Price -</Typography>
+                        <Typography sx={{ fontSize: '14px', fontWeight: 500, pl: '2px' }}>
+                          {calculation.carPrice}$
+                        </Typography>
                       </Box>
                       <Divider sx={{ width: '100%' }} />
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', py: '4px' }}>
-                        <Typography>Maqsaturq -</Typography>
-                        <Typography sx={{ fontWeight: 500, pl: '2px' }}>4,500$</Typography>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '2px 0 2px 9px' }}>
+                        <Typography sx={{ fontSize: '14px' }}>Fob -</Typography>
+                        <Typography sx={{ fontSize: '14px', fontWeight: 500, pl: '2px' }}>
+                          {calculation.fee}$
+                        </Typography>
                       </Box>
                       <Divider sx={{ width: '100%' }} />
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', py: '4px' }}>
-                        <Typography>Total -</Typography>
-                        <Typography sx={{ fontWeight: 500, pl: '2px' }}>11,100$</Typography>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '2px 0 2px 9px' }}>
+                        <Typography sx={{ fontSize: '14px' }}>Shipment -</Typography>
+                        <Typography sx={{ fontSize: '14px', fontWeight: 500, pl: '2px' }}>
+                          {calculation.shipment}$
+                        </Typography>
+                      </Box>
+                    </Box>
+                    <Divider sx={{ width: '100%' }} />
+                    <Box sx={{ display: 'flex', flexDirection: 'column', pt: '4px' }}>
+                      <Typography sx={{ fontSize: '15px', fontWeight: 700 }}>Customs clearance:</Typography>
+
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '2px 0 1px 9px' }}>
+                        <Typography sx={{ fontSize: '14px' }}>Maqsaturq -</Typography>
+                        <Typography sx={{ fontSize: '14px', fontWeight: 500, pl: '2px' }}>
+                          {calculation.max}$
+                        </Typography>
+                      </Box>
+                      <Divider sx={{ width: '100%' }} />
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '2px 0 2px 9px' }}>
+                        <Typography sx={{ fontSize: '14px' }}>AAH -</Typography>
+                        <Typography sx={{ fontSize: '14px', fontWeight: 500, pl: '2px' }}>
+                          {calculation.AAH}$
+                        </Typography>
+                      </Box>
+                      <Divider sx={{ width: '100%' }} />
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '2px 0 2px 9px' }}>
+                        <Typography sx={{ fontSize: '14px' }}>Environmental tax -</Typography>
+                        <Typography sx={{ fontSize: '14px', fontWeight: 500, pl: '2px' }}>
+                          {calculation.nature}$
+                        </Typography>
                       </Box>
                       <Divider sx={{ width: '100%' }} />
                     </Box>
                   </Grid>
-                  <Grid item xs={6} direction="column" container pl={{ xs: 1, sm: 3 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', py: '4px' }}>
-                      <Typography>Car Price -</Typography>
-                      <Typography sx={{ fontWeight: 500, pl: '2px' }}>{item.buyNow.slice(1)}$</Typography>
+                  <Grid item xs={12} sm={6} direction="column" container pt={1} pl={{ xs: 0, sm: 3 }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                      <Typography sx={{ fontSize: '15px', fontWeight: 700 }}>Other Expenses:</Typography>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '2px 0 2px 9px' }}>
+                        <Typography sx={{ fontSize: '14px' }}>Taxes + Broker -</Typography>
+                        <Typography sx={{ fontSize: '14px', fontWeight: 500, pl: '2px' }}>300$</Typography>
+                      </Box>
+                      <Divider sx={{ width: '100%' }} />
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '2px 0 2px 9px' }}>
+                        <Typography sx={{ fontSize: '14px' }}>Commissions -</Typography>
+                        <Typography sx={{ fontSize: '14px', fontWeight: 500, pl: '2px' }}>200$</Typography>
+                      </Box>
+                      <Divider sx={{ width: '100%' }} />
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '4px 0 2px 0' }}>
+                        <Typography sx={{ fontSize: '15px', fontWeight: 700 }}>Total Summary -</Typography>
+                        <Typography sx={{ fontSize: '16px', fontWeight: 700, pl: '2px' }}>
+                          {calculation.total}$
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'flex-end',
+                          p: '4px 0 2px 0',
+                        }}
+                      >
+                        <Button
+                          sx={{ textTransform: 'capitalize' }}
+                          size="small"
+                          variant="contained"
+                          color="success"
+                        >
+                          Buy it now
+                        </Button>
+                        <Box
+                          onClick={() => setOpenColapse(!openCloapse)}
+                          sx={{ display: 'flex', justifyContent: 'flex-end', cursor: 'pointer' }}
+                        >
+                          {openCloapse ? <ExpandLess /> : <ExpandMore />}
+                        </Box>
+                      </Box>
                     </Box>
-                    <Divider sx={{ width: '100%' }} />
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', py: '4px' }}>
-                      <Typography>Fob -</Typography>
-                      <Typography sx={{ fontWeight: 500, pl: '2px' }}>1,000$</Typography>
-                    </Box>
-                    <Divider sx={{ width: '100%' }} />
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', py: '4px' }}>
-                      <Typography>Shipment -</Typography>
-                      <Typography sx={{ fontWeight: 500, pl: '2px' }}>2,500$</Typography>
-                    </Box>
+                  </Grid>
+                  <Grid item xs={12} container>
+                    <Collapse sx={{ width: '100%' }} in={openCloapse} timeout="auto" unmountOnExit>
+                      <Grid item xs={12} container justifyContent="flex-end" alignItems="flex-end">
+                        <Typography
+                          sx={{ width: '100%', textAlign: 'center', fontSize: '12px', color: 'red', py: 1 }}
+                        >
+                          If the year of the vin code in the picture does not match, please correct it!
+                        </Typography>
+                        <FormControl variant="standard" sx={{ mx: 1, minWidth: 80 }}>
+                          <InputLabel>Year</InputLabel>
+                          <Select
+                            name="year"
+                            value={yearMonth.year}
+                            onChange={handleChangeYearMonth}
+                            label="Year"
+                          >
+                            {years.map((item, index) => {
+                              return (
+                                <MenuItem key={item} value={item}>
+                                  {item}
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                        </FormControl>
+                        <FormControl variant="standard" sx={{ mx: 1, minWidth: 80 }}>
+                          <InputLabel>Month</InputLabel>
+                          <Select
+                            name="month"
+                            value={yearMonth.month}
+                            onChange={handleChangeYearMonth}
+                            label="Month"
+                          >
+                            {months.map((item, index) => {
+                              return (
+                                <MenuItem key={item} value={item}>
+                                  {item}
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                        </FormControl>
+                        <Button onClick={handleCorrectDate} variant="contained">
+                          Correct
+                        </Button>
+                      </Grid>
+                    </Collapse>
                   </Grid>
                 </Grid>
               </Paper>
