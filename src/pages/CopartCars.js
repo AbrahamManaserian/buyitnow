@@ -1,152 +1,40 @@
-import { Box, Button, Grid, LinearProgress, Typography } from '@mui/material';
+import { Grid, LinearProgress, Typography } from '@mui/material';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { AppContext } from '../App';
 import CarCard from '../components/CarCard';
-import { CopartIcon } from '../SVGIcons';
-import Image1 from '../images/merc1.jpeg';
-import Image2 from '../images/merc2.jpeg';
-import Image3 from '../images/merc3.jpeg';
-import Image4 from '../images/merc4.jpeg';
-import Image5 from '../images/merc5.jpeg';
-import Image6 from '../images/merc6.jpeg';
-import { getText } from '../texts';
-import { textCopartCars } from '../texts';
-import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../firebase';
-import { format, formatDistanceToNow, intervalToDuration } from 'date-fns';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import { Outlet, useLocation } from 'react-router-dom';
 import { CarInputs } from '../components/CarInputs';
+import getCar from '../getCarsFirebase';
+import CopartCarPage from './CopartCarPage';
 
-const data = [
-  {
-    name: '2020 MERCEDES-BENZ A 220',
-    image: Image1,
-    price: '13500',
-    odometer: '0',
-    actual: 'NOT ACTUAL',
-    damage: 'Water/Flood',
-    highlights: 'Enhanced Vehicles',
-  },
-  {
-    name: '2018 MERCEDES-BENZ S 560 4MATIC',
-    image: Image2,
-    price: '17900',
-    odometer: '0',
-    actual: 'NOT ACTUAL',
-    damage: 'Water/Flood',
-    highlights: 'Enhanced Vehicles',
-  },
-  {
-    name: '2019 MERCEDES-BENZ CLA 250',
-    image: Image3,
-    price: '12500',
-    odometer: '0',
-    actual: 'NOT ACTUAL',
-    damage: 'Front End',
-    highlights: 'Enhanced Vehicles',
-  },
-  {
-    name: '2018 MERCEDES-BENZ GLA 250 4MATIC',
-    image: Image4,
-    price: '13000',
-    odometer: '53216',
-    actual: 'ACTUAL',
-    damage: 'Front End',
-    highlights: 'Run and Drive',
-  },
-  {
-    name: '2021 MERCEDES-BENZ GLE COUPE AMG 53 4MATIC',
-    image: Image5,
-    price: '81500',
-    odometer: '36570',
-    actual: 'ACTUAL',
-    damage: 'Normal Wear',
-    highlights: 'Run and Drive',
-  },
-  {
-    name: '2019 MERCEDES-BENZ GLC 350E',
-    image: Image6,
-    price: '17000',
-    odometer: '0',
-    actual: 'Not ACTUAL',
-    damage: 'Front End',
-    highlights: 'Run and Drive',
-  },
-];
 export const CarsContext = createContext();
 export default function CopartCars() {
   let location = useLocation();
   // console.log(location.search);
-  const [carsRogueBuyNow, setCarsRogueBuyNow] = useState({ cars: [], name: '', lastUpdated: '' });
-  const [carsMercCBuyNow, setCarsMercCBuyNow] = useState({ cars: [], name: '', lastUpdated: '' });
-  const [carsRogueSportBuyNow, setCarsRogueSportBuyNow] = useState({ cars: [], name: '', lastUpdated: '' });
-
-  // console.log(new Date(carsRogue?.lastUpdated.nanoseconds));
+  const [accordBuyNow, setAccordBuyNow] = useState([]);
   useEffect(() => {
     // console.log('carsRogue.cars');
     async function getCars() {
-      const docRefRogueSportBuyNow = doc(db, 'cars', 'copart', 'Nissan', 'RogueSportBuyNow');
-      const docRefRogueBuyNow = doc(db, 'cars', 'copart', 'Nissan', 'RogueBuyNow');
-      const docRefMercCBuyNow = doc(db, 'cars', 'copart', 'Mercedes', 'CBuyNow');
-
-      const docSnapMercCBuyNow = await getDoc(docRefMercCBuyNow);
-      if (docSnapMercCBuyNow.data()) {
-        setCarsMercCBuyNow({
-          cars: Object.values(docSnapMercCBuyNow.data().data).sort((p1, p2) =>
-            +p1.buyNowNumber > +p2.buyNowNumber ? 1 : +p1.buyNowNumber < +p2.buyNowNumber ? -1 : 0
-          ),
-          name: docSnapMercCBuyNow.data().name,
-          lastUpdated: format(docSnapMercCBuyNow.data().lastUpdated, 'MM/dd/yyyy - H:mm:ss'),
-        });
-      }
-
-      const docSnapRogueBuyNow = await getDoc(docRefRogueBuyNow);
-      if (docSnapRogueBuyNow.data()) {
-        setCarsRogueBuyNow({
-          cars: Object.values(docSnapRogueBuyNow.data().data).sort((p1, p2) =>
-            +p1.buyNowNumber > +p2.buyNowNumber ? 1 : +p1.buyNowNumber < +p2.buyNowNumber ? -1 : 0
-          ),
-          name: docSnapRogueBuyNow.data().name,
-          lastUpdated: format(docSnapRogueBuyNow.data().lastUpdated, 'MM/dd/yyyy - H:mm:ss'),
-        });
-      }
-      const docSnapRogueSportBuyNow = await getDoc(docRefRogueSportBuyNow);
-      if (docSnapRogueSportBuyNow.data()) {
-        setCarsRogueSportBuyNow({
-          cars: Object.values(docSnapRogueSportBuyNow.data().data).sort((p1, p2) =>
-            +p1.buyNowNumber > +p2.buyNowNumber ? 1 : +p1.buyNowNumber < +p2.buyNowNumber ? -1 : 0
-          ),
-          name: docSnapRogueSportBuyNow.data().name,
-          lastUpdated: format(docSnapRogueSportBuyNow.data().lastUpdated, 'MM/dd/yyyy - H:mm:ss'),
-        });
-      }
+      const car = await getCar('HONDA', 'ACCORD', 'buynow');
+      setAccordBuyNow(car.data);
     }
     getCars();
   }, []);
+  // console.log(accordBuyNow);
   const context = useContext(AppContext);
-  // if (carsRogueBuyNow.cars[0]) {
-  //   let asd = +format(new Date(), 'd') - +format(new Date(carsRogueBuyNow.cars[0]?.detail.creationDate), 'd');
-  //   console.log(asd);
-  //   console.log(formatDistanceToNow(new Date(carsRogueBuyNow.cars[0]?.detail.creationDate)));
-  // }
+
   return (
-    <CarsContext.Provider
-      value={[...carsRogueBuyNow.cars, ...carsRogueSportBuyNow.cars, ...carsMercCBuyNow.cars]}
-    >
+    <CarsContext.Provider value={accordBuyNow}>
       <Grid item xs={12} container>
-        <Outlet />
-        {!location.search && (
+        {/* <Outlet /> */}
+        {!location.search ? (
           <Grid item xs={12} container>
             <CarInputs auction="copart" />
             <LinearProgress
               sx={{
                 width: '100%',
                 mx: { xs: '8px', sm: '25px' },
-                visibility: carsMercCBuyNow.cars[0] ? 'hidden' : '',
+                visibility: accordBuyNow[0] ? 'hidden' : '',
               }}
               color="primary"
             />
@@ -157,128 +45,49 @@ export default function CopartCars() {
               m="10px"
               sx={{ p: { xs: '0 0 0 0', sm: '0 0 0 30px' }, justifyContent: 'center' }}
             >
-              <>
-                {carsMercCBuyNow.cars[0] && (
-                  <>
-                    <Typography
-                      color="primary"
-                      sx={{
-                        width: '100%',
-                        my: '15px',
-                        borderBottom: 0.1,
-                        fontSize: '16px',
-                        fontWeight: 600,
-                      }}
-                    >
-                      {carsMercCBuyNow.name} - {carsMercCBuyNow.cars.length} items -{' '}
-                      {carsMercCBuyNow.lastUpdated}
-                    </Typography>
-                    {carsMercCBuyNow.cars.map((item, index) => {
-                      return (
-                        <CarCard
-                          url="/copart-cars/search?"
-                          key={item.lot}
-                          lot={item.lot}
-                          auctionDate={item.auctionDate1}
-                          href={item.href}
-                          price={item.currentBid}
-                          mode={context.darkMode}
-                          name={item.name}
-                          image={item.img}
-                          highlights={item.condition}
-                          damage={item.damage}
-                          // actual={cars[item].damage}
-                          odometer={item.odometer}
-                          buyNow={item.buyNow}
-                          creationDate={item.detail.creationDate}
-                        />
-                      );
-                    })}
-                  </>
-                )}
-              </>
-              <>
-                {carsRogueBuyNow.cars[0] && (
-                  <>
-                    <Typography
-                      color="primary"
-                      sx={{
-                        width: '100%',
-                        my: '15px',
-                        borderBottom: 0.1,
-                        fontSize: '16px',
-                        fontWeight: 600,
-                      }}
-                    >
-                      {carsRogueBuyNow.name} - {carsRogueBuyNow.cars.length} items -{' '}
-                      {carsRogueBuyNow.lastUpdated}
-                    </Typography>
-                    {carsRogueBuyNow.cars.map((item, index) => {
-                      return (
-                        <CarCard
-                          url="/copart-cars/search?"
-                          key={item.lot}
-                          lot={item.lot}
-                          auctionDate={item.auctionDate1}
-                          href={item.href}
-                          price={item.currentBid}
-                          mode={context.darkMode}
-                          name={item.name}
-                          image={item.img}
-                          highlights={item.condition}
-                          damage={item.damage}
-                          // actual={cars[item].damage}
-                          odometer={item.odometer}
-                          buyNow={item.buyNow}
-                          creationDate={item.detail.creationDate}
-                        />
-                      );
-                    })}
-                  </>
-                )}
-              </>
-              <>
-                {carsRogueSportBuyNow.cars[0] && (
-                  <>
-                    <Typography
-                      color="primary"
-                      sx={{
-                        width: '100%',
-                        my: '15px',
-                        borderBottom: 0.1,
-                        fontSize: '16px',
-                        fontWeight: 600,
-                      }}
-                    >
-                      {carsRogueSportBuyNow.name} - {carsRogueSportBuyNow.cars.length} items -{' '}
-                      {carsRogueSportBuyNow.lastUpdated}
-                    </Typography>
-                    {carsRogueSportBuyNow.cars.map((item, index) => {
-                      return (
-                        <CarCard
-                          key={item.lot}
-                          lot={item.lot}
-                          url="/copart-cars/search?"
-                          auctionDate={item.auctionDate1}
-                          href={item.href}
-                          price={item.currentBid}
-                          mode={context.darkMode}
-                          name={item.name}
-                          image={item.img}
-                          highlights={item.condition}
-                          damage={item.damage}
-                          // actual={cars[item].damage}
-                          odometer={item.odometer}
-                          buyNow={item.buyNow}
-                          creationDate={item.detail.creationDate}
-                        />
-                      );
-                    })}
-                  </>
-                )}
-              </>
+              <Typography
+                color="primary"
+                sx={{
+                  width: '100%',
+                  my: '15px',
+                  borderBottom: 0.1,
+                  fontSize: '16px',
+                  fontWeight: 600,
+                }}
+              >
+                HONDA ACCORD - {accordBuyNow.length} items
+              </Typography>
+              {accordBuyNow[0] &&
+                accordBuyNow.map((item) => {
+                  if (item.A.status) {
+                    return null;
+                  } else {
+                    return (
+                      <CarCard
+                        key={item['Lot number']}
+                        mode={context.darkMode}
+                        href={'as'}
+                        image={item.A.lotImages[0].link[0].url}
+                        name={`${item.Year} ${item.Make} ${item['Model Group']} ${item.Trim}`}
+                        lot={item['Lot number']}
+                        price={item['High Bid =non-vix,Sealed=Vix']}
+                        highlights={item['Runs/Drives']}
+                        damage={item['Damage Description']}
+                        odometer={`${item['Odometer']} ${
+                          item['Odometer Brand'] === 'A' ? '(ACTUAL)' : '(NOT ACTUAL)'
+                        } `}
+                        buyNow={item['Buy-It-Now Price']}
+                        auctionDate={item['Sale Date M/D/CY']}
+                        url="/copart-cars/search?"
+                        creationDate={item['Create Date/Time'].slice(0, 10)}
+                      />
+                    );
+                  }
+                })}
             </Grid>
           </Grid>
+        ) : (
+          <CopartCarPage carItems={accordBuyNow} />
         )}
       </Grid>
     </CarsContext.Provider>

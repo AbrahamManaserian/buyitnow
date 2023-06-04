@@ -379,25 +379,18 @@ const internetStart = [99, 499, 999, 1499, 1999, 3999, 5999, 7999, 10000000];
 
 const internetResult = [0, 39, 49, 69, 79, 89, 99, 119, 129];
 
-export default function calculateClearanceFee(year, month, carPrice, engineSize, location, change) {
+export default function calculateClearanceFee(year, month, carPrice, engineSize, state, city, change) {
+  // console.log(year, month, carPrice, engineSize, state, city, change);
   let shipment = 2500;
-  location = location.toLowerCase();
-  let state = '';
-  let town = '';
-  state = location.slice(1, 3);
   let key = '';
-  if (location.includes('sublot')) {
-    town = location.slice(6, location.length - 8);
-  } else {
-    town = location.slice(6, location.length - 1);
-  }
   if (Object.keys(usStates[state.toUpperCase()])[0]) {
-    key = Object.keys(usStates[state.toUpperCase()]).find((item) => item.toLowerCase() === town);
+    key = Object.keys(usStates[state.toUpperCase()]).find(
+      (item) => item.toLowerCase() === city.toLowerCase()
+    );
   }
-  if (key && state && town) {
+  if (key && state && city) {
     shipment = usStates[state.toUpperCase()][key];
   }
-  // console.log(usStates[state.toUpperCase()][key]);
   let fob = 0;
   if (carPrice >= 15000) {
     fob = Math.round((carPrice * 5.5) / 100 + 129 + 79 + 100);

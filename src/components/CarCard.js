@@ -1,10 +1,102 @@
 import { Box, Button, Grid, Typography } from '@mui/material';
-import { format, formatDistance, formatDistanceToNow, intervalToDuration } from 'date-fns';
+import { differenceInHours, format, formatDistance, formatDistanceToNow, intervalToDuration } from 'date-fns';
 import { Link } from 'react-router-dom';
+import { styled } from '@mui/material/styles';
+
+const PositionedTypography = styled(Typography)(({ theme, datedistance }) => ({
+  position: 'absolute',
+  top: '13px',
+  zIndex: 1,
+  backgroundColor: 'red',
+  borderRadius: '25px',
+  padding: '0 5px 0 5px',
+  fontSize: '13px',
+  fontWeight: 600,
+  color: 'white',
+  visibility: datedistance >= 24 ? 'hidden' : '',
+  [theme.breakpoints.up('xs')]: {
+    right: '13px',
+  },
+  [theme.breakpoints.up('sm')]: {
+    right: '23px',
+  },
+}));
+const CardContainer = styled(Grid)(({ theme, mode }) => ({
+  overflow: 'hidden',
+  boxShadow: `${mode !== 'dark' ? 'rgba(0, 0, 0, 0.3)' : 'rgb(245, 245, 245)'} 0 1px 3px`,
+  transition: 'all 0.2s ease-out',
+  '&:hover': {
+    transform: 'scale(1.02,1.02)',
+  },
+  display: 'flex',
+  flexDirection: 'column',
+  padding: '5px',
+  borderRadius: '10px',
+  [theme.breakpoints.up('xs')]: {
+    width: '100%',
+  },
+  [theme.breakpoints.up('sm')]: {
+    width: '230px',
+  },
+}));
+const ImageBox = styled(Box)(({ theme, mode }) => ({
+  display: 'flex',
+  height: { xs: '136px', sm: '170px' },
+  overflow: 'hidden',
+  alignContent: 'flex-start',
+  justifyContent: 'center',
+  alignItems: 'flex-start',
+  borderRadius: '7px',
+  [theme.breakpoints.up('xs')]: {
+    height: '136px',
+  },
+  [theme.breakpoints.up('sm')]: {
+    height: '170px',
+  },
+}));
+const FlexBox1 = styled(Box)(({ theme, mode }) => ({
+  display: 'flex',
+  alignItems: 'flex-end',
+  marginBottom: '4px',
+  overflow: 'hidden',
+  height: '45px',
+  justifyContent: 'space-between',
+}));
+const Typography1 = styled(Typography)(({ theme, mode }) => ({
+  fontSize: '14px',
+  fontWeight: 700,
+  height: '40px',
+  overflow: 'hidden',
+}));
+const Typography2 = styled(Typography)(({ theme, checkhighlights }) => ({
+  fontSize: '12px',
+  padding: '0 5px 0 5px',
+  margin: '5px 0 8px 2px',
+  backgroundColor: checkhighlights === 'E' ? '#80deea' : '#9ccc65',
+  borderRadius: '50%',
+}));
+const Typography3 = styled(Typography)(({ theme, checkhighlights }) => ({
+  fontSize: '14px',
+  height: '20px',
+  fontWeight: 500,
+  overflow: 'hidden',
+}));
+const Button1 = styled(Button)(({ theme, checkhighlights, buynow }) => ({
+  visibility: !buynow ? 'hidden' : 'flex',
+  padding: '10px',
+  borderRadius: '10px',
+  textTransform: 'capitalize',
+  height: '22px',
+  minWidth: '80px',
+  display: 'flex',
+  justifyContent: 'space-between',
+  overflow: 'hidden',
+  fontSize: '15px',
+  margin: '5px 0 5px 0',
+}));
 
 export default function CarCard({
   mode,
-  href,
   image,
   name,
   lot,
@@ -17,138 +109,40 @@ export default function CarCard({
   url,
   creationDate,
 }) {
-  const cheCkHighlights = highlights === 'Run and Drive Icon' ? 'R' : 'E';
+  const cheCkHighlights = highlights === 'Run & Drive Verified' ? 'R' : 'E';
   const date = intervalToDuration({
     start: new Date(),
-    end: new Date(auctionDate),
+    end: new Date(+auctionDate.slice(0, 4), +auctionDate.slice(4, 6), +auctionDate.slice(6, 8)),
   });
-  const dateDistance = +format(new Date(), 'd') - +format(new Date(creationDate), 'd');
-  // console.log(dateDistance);
+  const dateDistance = differenceInHours(new Date(), new Date(creationDate));
+  //   console.log(date);
   return (
     <Box sx={{ width: { xs: '50%', sm: '250px' }, p: '5px', position: 'relative' }}>
-      <Typography
-        sx={{
-          position: 'absolute',
-          top: '13px',
-          right: { xs: '13px', sm: '23px' },
-          zIndex: 1,
-          bgcolor: 'red',
-          borderRadius: '25px',
-          px: '5px',
-          fontSize: '13px',
-          fontWeight: 600,
-          color: 'white',
-          visibility: dateDistance > 1 ? 'hidden' : '',
-        }}
-      >
-        New
-      </Typography>
+      <PositionedTypography datedistance={dateDistance}>New</PositionedTypography>
       <Link to={`${url}lot=${lot}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-        <Grid
-          sx={{
-            width: { xs: '100%', sm: '230px' },
-            overflow: 'hidden',
-            // height: '350px',
-            boxShadow: `${mode !== 'dark' ? 'rgba(0, 0, 0, 0.3)' : 'rgb(245, 245, 245)'} 0 1px 3px`,
-            transition: 'all 0.2s ease-out',
-            // cursor: 'pointer',
-            '&:hover': {
-              transform: 'scale(1.02,1.02)',
-            },
-            display: 'flex',
-            flexDirection: 'column',
-            p: '5px',
-            borderRadius: '10px',
-          }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              height: { xs: '136px', sm: '170px' },
-              overflow: 'hidden',
-              alignContent: 'flex-start',
-              justifyContent: 'center',
-              alignItems: 'flex-start',
-              borderRadius: '7px',
-            }}
-          >
+        <CardContainer mode={mode}>
+          <ImageBox>
             <img src={image} style={{ width: '100%', height: 'auto', borderRadius: '7px' }} />
-          </Box>
-          <Box
+          </ImageBox>
+          <FlexBox1
             sx={{
-              display: 'flex',
-              alignItems: 'flex-end',
-              marginBottom: '4px',
-              overflow: 'hidden',
               borderBottom: 0.1,
-              height: '45px',
-              justifyContent: 'space-between',
             }}
           >
-            <Typography
-              color={mode === 'dark' ? '#9fa8da' : '#3949ab'}
-              sx={{
-                fontSize: '14px',
-                fontWeight: 700,
-                height: '40px',
-                overflow: 'hidden',
-              }}
-            >
-              {name}
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: '12px',
-                p: '0 5px 0 5px',
-                m: '5px 0 8px 2px',
-                bgcolor: cheCkHighlights === 'E' ? '#80deea' : '#9ccc65',
-                borderRadius: '50%',
-              }}
-            >
-              {cheCkHighlights}
-            </Typography>
-          </Box>
+            <Typography1 color={mode === 'dark' ? '#9fa8da' : '#3949ab'}>{name}</Typography1>
+            <Typography2 checkhighlights={cheCkHighlights}>{cheCkHighlights}</Typography2>
+          </FlexBox1>
           <Typography color="error" sx={{ fontSize: '13px', fontWeight: 500 }}>
-            Added{' '}
-            {/* {formatDistance(new Date(creationDate), new Date(), {
-              addSuffix: true,
-            })} */}
-            {formatDistanceToNow(new Date(creationDate), { addSuffix: true })}
+            Added {formatDistanceToNow(new Date(creationDate), { addSuffix: true })}
           </Typography>
           <Box sx={{ display: 'flex' }}>
-            <Typography
-              sx={{
-                fontSize: '12px',
-              }}
-            >
-              Lot#
-            </Typography>
+            <Typography fontSize="12px">Lot#</Typography>
             <Typography color="primary.main" sx={{ fontSize: '12px', pl: '5px' }}>
-              {' '}
               {lot ? lot : '23445545'}
             </Typography>
           </Box>
-          <Typography
-            sx={{
-              fontSize: '14px',
-              height: '20px',
-              fontWeight: 500,
-              // mb: '3px',
-              overflow: 'hidden',
-            }}
-          >
-            {damage} Damage
-          </Typography>
-          <Typography
-            sx={{
-              height: '20px',
-              overflow: 'hidden',
-              fontSize: '14px',
-              fontWeight: 500,
-            }}
-          >
-            {odometer}
-          </Typography>
+          <Typography3>{damage} Damage</Typography3>
+          <Typography3>{odometer}</Typography3>
 
           <Box
             sx={{
@@ -160,42 +154,23 @@ export default function CarCard({
             <Typography
               sx={{
                 fontSize: '14px',
-                // mb: '3px',
                 fontWeight: 600,
               }}
             >
               Current Bid
             </Typography>
 
-            <Typography sx={{ fontSize: '14px', fontWeight: 600 }}>${price}</Typography>
+            <Typography sx={{ fontSize: '15px', fontWeight: 600 }}>${price}</Typography>
           </Box>
-          <Button
-            sx={{
-              visibility: !buyNow ? 'hidden' : 'flex',
-              p: '10px',
-              borderRadius: '10px',
-              textTransform: 'capitalize',
-              height: '22px',
-              minWidth: '80px',
-              display: 'flex',
-              justifyContent: 'space-between',
-              overflow: 'hidden',
-              fontSize: '15px',
-              my: '5px',
-            }}
-            size="small"
-            variant="contained"
-            color="success"
-            ml={1}
-          >
+          <Button1 buynow={buyNow} size="small" variant="contained" color="success" ml={1}>
             Buy now
             <Typography sx={{ fontSize: '15px', fontWeight: 600, pl: '2px' }}>-</Typography>
             <Typography sx={{ fontSize: '15px', fontWeight: 600, pl: '2px' }}>{buyNow}</Typography>
-          </Button>
+          </Button1>
           <Typography color="error" sx={{ fontSize: '13px', fontWeight: 500 }}>
             Auction in {date.days}D {date.hours}H {date.minutes}min
           </Typography>
-        </Grid>
+        </CardContainer>
       </Link>
     </Box>
   );

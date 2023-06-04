@@ -1,4 +1,5 @@
 import { Link, useLocation, useParams } from 'react-router-dom';
+import ReactImageZoom from 'react-image-zoom';
 import { CarsContext } from './CopartCars';
 import { useContext, useEffect, useState } from 'react';
 import {
@@ -27,8 +28,9 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/Inbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
-import calculateClearanceFee from '../calculateClearanceFee';
+import calculateClearanceFee from '../calculateClearanceFee1';
 import { ExpandLess, ExpandMore, StarBorder } from '@mui/icons-material';
+// import { fun } from '../puppeteer/anunik';
 
 // console.log(calculateClearanceFee(2017, 7, 10000, 2.5, 2000, 1.0893));
 const years = [2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016];
@@ -37,9 +39,11 @@ export default function CopartCarPage({ carItems }) {
   // console.log(format(Date.now(), 'MM/dd/yyyy - H:mm:ss'));
   const url = new URL(window.location.href);
   const [item, setItem] = useState({});
-  const [image, setImage] = useState('');
+  const [zoom, setZoom] = useState(false);
+  const [images, setImages] = useState([]);
+  const [imgIndex, setImgIndex] = useState(-1);
   const cars = useContext(CarsContext);
-  const [date, setDate] = useState({});
+  //   const [date, setDate] = useState({});
   const [yearMonth, setYearMonth] = useState({ year: '', month: '' });
   const [openCloapse, setOpenColapse] = useState(false);
   const [calculation, setCalculation] = useState({
@@ -51,16 +55,20 @@ export default function CopartCarPage({ carItems }) {
     carPrice: 0,
     total: 0,
   });
+
   useEffect(() => {
-    if (item.name) {
+    if (item['Buy-It-Now Price']) {
+      //   console.log(+item.Engine.slice(0, 3));
       const obj = calculateClearanceFee(
-        +item.name.slice(1, 5),
+        +item.Year,
         12,
-        +item.buyNowNumber,
-        +item.detail.engine.slice(0, 3) || 1.1,
-        item.location,
+        +item['Buy-It-Now Price'],
+        +item.Engine.slice(0, 3) || 1.1,
+        item['Location state'],
+        item['Yard name'].slice(5),
         1.0893
       );
+      //   console.log(obj);
       setCalculation({
         fee: obj.fob,
         max: obj.max,
@@ -68,49 +76,35 @@ export default function CopartCarPage({ carItems }) {
         nature: obj.nature,
         clearance: obj.clearance,
         shipment: obj.shipment,
-        carPrice: item.buyNowNumber,
-        total: obj.shipment + +item.buyNowNumber + obj.clearance + obj.fob + 500,
+        carPrice: +item['Buy-It-Now Price'],
+        total: obj.shipment + +item['Buy-It-Now Price'] + obj.clearance + obj.fob + 500,
       });
-      setYearMonth({ year: +item.name.slice(1, 5), month: 12 });
+      setYearMonth({ year: +item.Year, month: 12 });
     }
   }, [item]);
   useEffect(() => {
-    if (!carItems) {
-      const filteredItem = cars.find((item) => item.lot === url.searchParams.get('lot'));
-      if (filteredItem) {
-        setDate(
-          intervalToDuration({
-            start: new Date(),
-            end: new Date(filteredItem.auctionDate1),
-          })
-        );
+    const filteredItem = carItems.find((item) => item['Lot number'] === url.searchParams.get('lot'));
+    if (filteredItem) {
+      //   setDate(
+      //     intervalToDuration({
+      //       start: new Date(),
+      //       end: new Date(+filteredItem['Sale Date M/D/CY']),
+      //     })
+      //   );
 
-        setItem(filteredItem);
-        setImage(filteredItem?.img);
-      }
-    } else {
-      const filteredItem = carItems.find((item) => item.lot === url.searchParams.get('lot'));
-      if (filteredItem) {
-        setDate(
-          intervalToDuration({
-            start: new Date(),
-            end: new Date(filteredItem.auctionDate1),
-          })
-        );
-
-        setItem(filteredItem);
-        setImage(filteredItem?.img);
-      }
+      setItem(filteredItem);
+      setImages(filteredItem.A.lotImages.map((item) => item.link[2].url));
     }
-  }, [cars, carItems]);
+  }, [carItems]);
 
   const handleCorrectDate = () => {
     const obj = calculateClearanceFee(
       yearMonth.year,
       yearMonth.month,
-      +item.buyNowNumber,
-      +item.detail.engine.slice(0, 3) || 1.1,
-      item.location,
+      +item['Buy-It-Now Price'],
+      +item.Engine.slice(0, 3) || 1.1,
+      item['Location state'],
+      item['Location city'],
       1.0893
     );
     setCalculation({
@@ -120,8 +114,8 @@ export default function CopartCarPage({ carItems }) {
       nature: obj.nature,
       clearance: obj.clearance,
       shipment: obj.shipment,
-      carPrice: item.buyNowNumber,
-      total: obj.shipment + +item.buyNowNumber + obj.clearance + obj.fob + 500,
+      carPrice: +item['Buy-It-Now Price'],
+      total: obj.shipment + +item['Buy-It-Now Price'] + obj.clearance + obj.fob + 500,
     });
     setOpenColapse(false);
   };
@@ -134,41 +128,46 @@ export default function CopartCarPage({ carItems }) {
   };
 
   const handleClickImage = (name) => {
-    if (name === 'back') {
-      if (item.detail.imgs.hd.indexOf(image) === -1 || item.detail.imgs.hd.indexOf(image) === 0) {
-        setImage(item.detail.imgs.hd[item.detail.imgs.hd.length - 1]);
+    if (name !== 'back') {
+      if (imgIndex < item.A.lotImages.length - 1) {
+        if (imgIndex === -1) {
+          setImgIndex(1);
+        } else {
+          setImgIndex(imgIndex + 1);
+        }
       } else {
-        setImage(item.detail.imgs.hd[item.detail.imgs.hd.indexOf(image) - 1]);
+        setImgIndex(0);
       }
     } else {
-      if (item.detail.imgs.hd.indexOf(image) === item.detail.imgs.hd.length - 1) {
-        setImage(item.detail.imgs.hd[0]);
-      } else if (item.detail.imgs.hd.indexOf(image) === -1) {
-        setImage(item.detail.imgs.hd[1]);
+      if (imgIndex === -1 || imgIndex === 0) {
+        setImgIndex(item.A.lotImages.length - 1);
       } else {
-        setImage(item.detail.imgs.hd[item.detail.imgs.hd.indexOf(image) + 1]);
+        setImgIndex(imgIndex - 1);
       }
     }
   };
+  //   console.log(carItems);
+  // console.log(item);
+  //   console.log(images);
   return (
     <>
-      {item.detail && (
+      {item.A && (
         <Grid item container xs={12} p={2} pb={50}>
           <Grid item xs={12} container flexWrap={true} pb={1}>
             <Box sx={{ display: 'flex', alignItems: 'flex-end', width: '100%' }}>
               <Typography sx={{ fontWeight: 700, fontSize: { xs: '19px', sm: '25px' } }}>
-                {item.name} |
+                {item.Year} {item.Make} {item['Model Group']}|
               </Typography>
               <Typography
                 sx={{
                   fontSize: '13px',
                   p: '0 6px 0 6px',
                   m: '5px 0 5px 5px',
-                  bgcolor: item.condition !== 'Run and Drive Icon' ? '#80deea' : '#9ccc65',
+                  bgcolor: item['Runs/Drives'] !== 'Run & Drive Verified' ? '#80deea' : '#9ccc65',
                   borderRadius: '50%',
                 }}
               >
-                {item.condition !== 'Run and Drive Icon' ? 'E' : 'R'}
+                {item['Runs/Drives'] !== 'Run & Drive Verified' ? 'E' : 'R'}
               </Typography>
             </Box>
             <Typography
@@ -176,7 +175,7 @@ export default function CopartCarPage({ carItems }) {
                 fontSize: '12px',
               }}
             >
-              Lot # {item.lot} | Sale Location:
+              Lot # {item['Lot number']} | Sale Location:
             </Typography>
             <Typography
               color="primary"
@@ -186,16 +185,17 @@ export default function CopartCarPage({ carItems }) {
                 px: '4px',
               }}
             >
-              {item.location || 'as'}
+              {item['Location state']} - {item['Location city']}
             </Typography>
             <Typography
               sx={{
                 fontSize: '12px',
               }}
             >
-              | Sale Date: {item.detail.auctionDate || format(new Date(item.auctionDate1), 'iii. PPpp')}
+              | Sale Date: {format(new Date(+item['Sale Date M/D/CY']), 'iii. PPpp')}
             </Typography>
           </Grid>
+
           <Grid alignContent="flex-start" item container xs={12} sm={6} md={7}>
             <Grid alignContent="flex-start" item container xs={12} pb={1} sx={{ position: 'relative' }}>
               <Box
@@ -260,15 +260,27 @@ export default function CopartCarPage({ carItems }) {
               >
                 <ForwardIcon />
               </div>
-              {/* <ArrowBackIosIcon sx={{ fontWeight: 700, zIndex: 2, position: 'absolute', bottom: '25px' }} /> */}
-              <img style={{ width: '100%', height: 'auto' }} src={image} />
+              <img
+                style={{ width: '100%', height: 'auto', display: imgIndex === -1 ? 'block' : 'none' }}
+                src={item.A.lotImages[0].link[0].url}
+              />
+              {images.map((item, index) => {
+                return (
+                  <img
+                    key={index}
+                    style={{ width: '100%', height: 'auto', display: imgIndex === index ? 'block' : 'none' }}
+                    src={item}
+                  />
+                );
+              })}
             </Grid>
-            <Grid item container xs={12} alignContent="flex-start">
-              {item.detail.imgs.small.map((itema, index) => {
+
+            <Grid item container xs={12} alignItems="flex-start" alignContent="flex-start">
+              {item.A.lotImages.map((item1, index) => {
                 return (
                   <Grid
                     sx={{
-                      border: item?.detail.imgs.hd[index] === image ? 1 : 0,
+                      border: index === imgIndex ? 1 : 0,
                       padding: '4px',
                       borderRadius: '5px',
                     }}
@@ -281,14 +293,19 @@ export default function CopartCarPage({ carItems }) {
                     md={2}
                   >
                     <img
-                      onClick={() => setImage(item?.detail.imgs.hd[index])}
+                      onClick={() => setImgIndex(index)}
+                      onLoad={() => {
+                        if (index === item.A.lotImages.length - 1) {
+                          setImages(item.A.lotImages.map((item1) => item1.link[1].url));
+                        }
+                      }}
                       style={{
                         borderRadius: 2,
                         width: '100%',
                         height: 'auto',
                         cursor: 'pointer',
                       }}
-                      src={itema}
+                      src={item1.link[2].url}
                     />
                   </Grid>
                 );
@@ -482,13 +499,15 @@ export default function CopartCarPage({ carItems }) {
             >
               <Paper elevation={3}>
                 <Box sx={{ width: '100%', maxWidth: { xs: '100%', sm: 360 } }}>
-                  <Link to={item.href} target="_blank">
-                    Go to copart lot# {item.lot}
+                  <Link to={`https://www.copart.com/lot/${item['Lot number']}`} target="_blank">
+                    Go to copart lot# {item['Lot number']}
                   </Link>
                   <nav aria-label="main mailbox folders">
                     <List>
                       <ListItem disablePadding>
-                        <Typography sx={{ fontWeight: 700 }}>{item.name} </Typography>
+                        <Typography sx={{ fontWeight: 700 }}>
+                          {item.Year} {item.Make} {item['Model Group']}{' '}
+                        </Typography>
                       </ListItem>
                       <Divider />
                       <ListItem
@@ -496,7 +515,22 @@ export default function CopartCarPage({ carItems }) {
                         secondaryAction={
                           <ListItemText
                             sx={{ '.MuiListItemText-primary': { fontWeight: 600 } }}
-                            primary={item.currentBid + '$'}
+                            primary={item.VIN}
+                          />
+                        }
+                      >
+                        <ListItemText
+                          sx={{ '.MuiListItemText-primary': { fontSize: '14px' } }}
+                          primary="VIN:"
+                        />
+                      </ListItem>
+                      <Divider />
+                      <ListItem
+                        disablePadding
+                        secondaryAction={
+                          <ListItemText
+                            sx={{ '.MuiListItemText-primary': { fontWeight: 600 } }}
+                            primary={item['High Bid =non-vix,Sealed=Vix'] + '$'}
                           />
                         }
                       >
@@ -511,7 +545,7 @@ export default function CopartCarPage({ carItems }) {
                         secondaryAction={
                           <ListItemText
                             sx={{ '.MuiListItemText-primary': { fontWeight: 600, color: 'red' } }}
-                            primary={item.buyNow}
+                            primary={item['Buy-It-Now Price']}
                           />
                         }
                       >
@@ -526,7 +560,7 @@ export default function CopartCarPage({ carItems }) {
                         secondaryAction={
                           <ListItemText
                             sx={{ '.MuiListItemText-primary': { fontWeight: 600 } }}
-                            primary={item.lot}
+                            primary={item['Lot number']}
                           />
                         }
                       >
@@ -541,7 +575,7 @@ export default function CopartCarPage({ carItems }) {
                         secondaryAction={
                           <ListItemText
                             sx={{ '.MuiListItemText-primary': { fontWeight: 600 } }}
-                            primary={format(new Date(item.detail.creationDate), 'P - hh:mm')}
+                            primary={format(new Date(item['Create Date/Time'].slice(0, 10)), 'P - hh:mm')}
                           />
                         }
                       >
@@ -557,7 +591,9 @@ export default function CopartCarPage({ carItems }) {
                         secondaryAction={
                           <ListItemText
                             sx={{ '.MuiListItemText-primary': { fontSize: '14px' } }}
-                            primary={item.title}
+                            primary={`${item['Location state']} - ${
+                              item['Sale Title Type'] === 'SC' ? 'SALVAGE CERTIFICATE' : 'BILL OF SALE'
+                            }`}
                           />
                         }
                       >
@@ -573,7 +609,9 @@ export default function CopartCarPage({ carItems }) {
                         secondaryAction={
                           <ListItemText
                             sx={{ '.MuiListItemText-primary': { fontSize: '14px' } }}
-                            primary={item.odometer}
+                            primary={`${+item.Odometer} ${
+                              item['Odometer Brand'] === 'A' ? '(ACTUAL)' : '(NOT ACTUAL)'
+                            }`}
                           />
                         }
                       >
@@ -588,7 +626,9 @@ export default function CopartCarPage({ carItems }) {
                         secondaryAction={
                           <ListItemText
                             sx={{ '.MuiListItemText-primary': { fontSize: '14px' } }}
-                            primary={item.condition?.slice(0, -4)}
+                            primary={`${
+                              item['Runs/Drives'] === 'DEFAULT' ? 'Enhanced Vehicles' : 'Run and Drive'
+                            }`}
                           />
                         }
                       >
@@ -603,7 +643,7 @@ export default function CopartCarPage({ carItems }) {
                         secondaryAction={
                           <ListItemText
                             sx={{ '.MuiListItemText-primary': { fontSize: '14px' } }}
-                            primary={item.damage.slice(0, -6)}
+                            primary={item['Damage Description']}
                           />
                         }
                       >
@@ -618,7 +658,7 @@ export default function CopartCarPage({ carItems }) {
                         secondaryAction={
                           <ListItemText
                             sx={{ '.MuiListItemText-primary': { fontSize: '14px' } }}
-                            primary={item.secondaryDamage || 'unknown'}
+                            primary={item['Secondary Damage'] || 'unknown'}
                           />
                         }
                       >
@@ -633,7 +673,7 @@ export default function CopartCarPage({ carItems }) {
                         secondaryAction={
                           <ListItemText
                             sx={{ '.MuiListItemText-primary': { fontSize: '14px' } }}
-                            primary={item.detail.color || 'unknown'}
+                            primary={item.Color || 'unknown'}
                           />
                         }
                       >
@@ -648,7 +688,7 @@ export default function CopartCarPage({ carItems }) {
                         secondaryAction={
                           <ListItemText
                             sx={{ '.MuiListItemText-primary': { fontSize: '14px' } }}
-                            primary={item.detail.engine || 'unknown'}
+                            primary={item.Engine || 'unknown'}
                           />
                         }
                       >
@@ -663,7 +703,7 @@ export default function CopartCarPage({ carItems }) {
                         secondaryAction={
                           <ListItemText
                             sx={{ '.MuiListItemText-primary': { fontSize: '14px' } }}
-                            primary={item.detail.cylinders || 'unknown'}
+                            primary={item.Cylinders || 'unknown'}
                           />
                         }
                       >
@@ -678,7 +718,7 @@ export default function CopartCarPage({ carItems }) {
                         secondaryAction={
                           <ListItemText
                             sx={{ '.MuiListItemText-primary': { fontSize: '14px' } }}
-                            primary={item.detail.drive || 'unknown'}
+                            primary={item.Drive || 'unknown'}
                           />
                         }
                       >
@@ -693,7 +733,7 @@ export default function CopartCarPage({ carItems }) {
                         secondaryAction={
                           <ListItemText
                             sx={{ '.MuiListItemText-primary': { fontSize: '14px' } }}
-                            primary={item.detail.keys || 'unknown'}
+                            primary={item['Has Keys-Yes or No'] || 'unknown'}
                           />
                         }
                       >
@@ -746,7 +786,7 @@ export default function CopartCarPage({ carItems }) {
                 >
                   <Typography>Sale Status:</Typography>
                   <Typography sx={{ maxWidth: '145px', fontSize: '14px', textAlign: 'right' }}>
-                    {item.detail.saleStatus}
+                    {item['Sale Status']}
                   </Typography>
                 </Box>
                 <Divider sx={{ width: '100%', maxWidth: 360 }} />
@@ -762,7 +802,7 @@ export default function CopartCarPage({ carItems }) {
                 >
                   <Typography>Location:</Typography>
                   <Typography sx={{ maxWidth: '145px', fontSize: '14px', textAlign: 'right' }}>
-                    {item.location || 'unknown'}
+                    {item['Yard name'] || 'unknown'}
                   </Typography>
                 </Box>
                 <Divider sx={{ width: '100%', maxWidth: 360 }} />
@@ -778,7 +818,14 @@ export default function CopartCarPage({ carItems }) {
                 >
                   <Typography>Sale Date:</Typography>
                   <Typography sx={{ maxWidth: '145px', fontSize: '14px', textAlign: 'right' }}>
-                    {item.detail.auctionDate || format(new Date(item.auctionDate1), 'iii. PPpp')}
+                    {format(
+                      new Date(
+                        +item['Sale Date M/D/CY'].slice(0, 4),
+                        +item['Sale Date M/D/CY'].slice(4, 6),
+                        +item['Sale Date M/D/CY'].slice(6, 8)
+                      ),
+                      'iii. PPpp'
+                    )}
                   </Typography>
                 </Box>
 
@@ -805,13 +852,47 @@ export default function CopartCarPage({ carItems }) {
                       fontWeight: 500,
                     }}
                   >
-                    {date.days}D {date.hours}H {date.minutes}min
+                    {
+                      intervalToDuration({
+                        start: new Date(),
+                        end: new Date(
+                          +item['Sale Date M/D/CY'].slice(0, 4),
+                          +item['Sale Date M/D/CY'].slice(4, 6),
+                          +item['Sale Date M/D/CY'].slice(6, 8)
+                        ),
+                      }).days
+                    }
+                    D
+                    {
+                      intervalToDuration({
+                        start: new Date(),
+                        end: new Date(
+                          +item['Sale Date M/D/CY'].slice(0, 4),
+                          +item['Sale Date M/D/CY'].slice(4, 6),
+                          +item['Sale Date M/D/CY'].slice(6, 8)
+                        ),
+                      }).hours
+                    }
+                    H
+                    {
+                      intervalToDuration({
+                        start: new Date(),
+                        end: new Date(
+                          +item['Sale Date M/D/CY'].slice(0, 4),
+                          +item['Sale Date M/D/CY'].slice(4, 6),
+                          +item['Sale Date M/D/CY'].slice(6, 8)
+                        ),
+                      }).minutes
+                    }
+                    min
                   </Typography>
                 </Box>
                 <Divider sx={{ width: '100%', maxWidth: 360 }} />
               </Paper>
             </Box>
           </Grid>
+
+          {/* <Button>Call</Button> */}
         </Grid>
       )}
     </>
