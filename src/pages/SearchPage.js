@@ -23,7 +23,8 @@ import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 import { SettingsIcon } from '../SVGIcons';
-import { checkDate } from '../dataReaderWriterFunctions/Accord';
+import { checkDate } from '../dataReaderWriterFunctions/getAuctionDates';
+// import { checkDate } from '../dataReaderWriterFunctions/Accord';
 
 const sortTypes = ['Auction Date', 'Buy It Now', 'Year', 'Current Bid'];
 
