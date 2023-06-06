@@ -7,6 +7,8 @@ import {
   MenuItem,
   Select,
   Stack,
+  Tab,
+  Tabs,
   Typography,
 } from '@mui/material';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
@@ -35,12 +37,19 @@ export default function SearchPage() {
   const [cars, setCars] = useState({ cars: [], name: '', lastUpdated: '' });
   const [sortBy, setSortBy] = useState('Buy It Now');
   const [drawer, setDrawer] = useState(false);
+  const url = new URL(window.location.href);
+  const [value, setValue] = useState(url.searchParams.get('key'));
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   let location = useLocation();
   const navigate = useNavigate();
   const context = useContext(AppContext);
-  const url = new URL(window.location.href);
-  //   console.log(cars);
+
+  // console.log(filteredCars);
   const handleChangeSortBy = (e) => {
+    console.log(e.target.value);
     setSortBy(e.target.value);
     if (e.target.value === 'Year') {
       setFilteredCars({
@@ -68,11 +77,7 @@ export default function SearchPage() {
       setFilteredCars({
         ...filteredCars,
         cars: filteredCars.cars.sort((p1, p2) => {
-          return +p1['Sale Date M/D/CY'] > +p2['Sale Date M/D/CY']
-            ? 1
-            : +p1['Sale Date M/D/CY'] < +p2['Sale Date M/D/CY']
-            ? -1
-            : 0;
+          return +p1.armAuctDate < +p2.armAuctDate ? 1 : +p1.armAuctDate > +p2.armAuctDate ? -1 : 0;
         }),
       });
       return;
@@ -129,9 +134,23 @@ export default function SearchPage() {
       if (docSnap.data()) {
         // console.log(docSnap.data().data[0]);
         if (docSnap.data().data[0]) {
-          if (url.searchParams.get('key' === 'buynow')) {
+          const arr = docSnap.data().data.map((item) => {
+            const timeDifference = item['Time Zone'] === 'PDT' ? 12 * 3600 * 1000 : 8 * 3600 * 1000;
+            // console.log(timeDifference);
+            const date = new Date(
+              +new Date(
+                +item['Sale Date M/D/CY'].slice(0, 4),
+                +item['Sale Date M/D/CY'].slice(4, 6) - 1,
+                +item['Sale Date M/D/CY'].slice(6, 8),
+                +item['Sale time (HHMM)'].slice(0, 2)
+              ) + timeDifference
+            );
+            return { ...item, armAuctDate: date };
+          });
+          // console.log(arr);
+          if (url.searchParams.get('key') === 'buynow') {
             setCars({
-              cars: Object.values(docSnap.data().data).sort((p1, p2) =>
+              cars: Object.values(arr).sort((p1, p2) =>
                 +p1['Buy-It-Now Price'] > +p2['Buy-It-Now Price']
                   ? 1
                   : +p1['Buy-It-Now Price'] < +p2['Buy-It-Now Price']
@@ -144,12 +163,8 @@ export default function SearchPage() {
             setSortBy('Buy It Now');
           } else {
             setCars({
-              cars: Object.values(docSnap.data().data).sort((p1, p2) =>
-                +p1['Sale Date M/D/CY'] > +p2['Sale Date M/D/CY']
-                  ? 1
-                  : +p1['Sale Date M/D/CY'] < +p2['Sale Date M/D/CY']
-                  ? -1
-                  : 0
+              cars: Object.values(arr).sort((p1, p2) =>
+                +p1.armAuctDate > +p2.armAuctDate ? 1 : +p1.armAuctDate < +p2.armAuctDate ? -1 : 0
               ),
               name: docSnap.data().make + ' ' + docSnap.data().model,
               lastUpdated: format(docSnap.data().lastUpdated, 'MM/dd/yyyy - H:mm:ss'),
@@ -245,35 +260,30 @@ export default function SearchPage() {
               color="primary"
             />
             <Grid item xs={12} sx={{ p: 1, pl: { xs: 1, sm: 5 } }}>
-              <ButtonGroup color="secondary" size="small" variant="text" aria-label="text button group">
-                {auctionDates.map((item, index) => {
-                  if (index < auctionDates.length / 2)
-                    return (
-                      <Button
-                        variant={url.searchParams.get('key') === item.fetch ? 'contained' : 'text'}
-                        onClick={() => handleClickAuctionDate(item.fetch)}
-                        sx={{ borderRight: 0.1, borderBottomRightRadius: 0, borderTopRightRadius: 0 }}
-                        key={index}
-                      >
-                        {item.name}
-                      </Button>
-                    );
-                })}
-              </ButtonGroup>
-              <ButtonGroup color="secondary" size="small" variant="text" aria-label="text button group">
-                {auctionDates.map((item, index) => {
-                  if (index > auctionDates.length / 2)
-                    return (
-                      <Button
-                        variant={url.searchParams.get('key') === item.fetch ? 'contained' : 'text'}
-                        onClick={() => handleClickAuctionDate(item.fetch)}
-                        key={index}
-                      >
-                        {item.name}
-                      </Button>
-                    );
-                })}
-              </ButtonGroup>
+              {auctionDates.map((item, index) => {
+                return (
+                  <Button
+                    sx={{ fontSize: '11px', p: '2px', m: '2px' }}
+                    size="small"
+                    variant={url.searchParams.get('key') === item.fetch ? 'contained' : 'outlined'}
+                    onClick={() => handleClickAuctionDate(item.fetch)}
+                    // sx={{ borderRight: 0.1, borderBottomRightRadius: 0, borderTopRightRadius: 0 }}
+                    key={index}
+                  >
+                    {item.name}
+                  </Button>
+                );
+              })}
+              <Button
+                sx={{ fontSize: '11px', p: '2px 4px 2px 4px', m: '2px' }}
+                size="small"
+                color="success"
+                variant={url.searchParams.get('key') === 'buynow' ? 'contained' : 'outlined'}
+                onClick={() => handleClickAuctionDate('buynow')}
+                // key={index}
+              >
+                Buy it Now
+              </Button>
             </Grid>
 
             <Grid
@@ -336,26 +346,28 @@ export default function SearchPage() {
                     </FormControl>
                   </Box>
                   {filteredCars.cars.map((item, index) => {
-                    return (
-                      <CarCard
-                        url={`${location.search}&`}
-                        key={item['Lot number']}
-                        mode={context.darkMode}
-                        href={'as'}
-                        image={item.A.lotImages[0].link[0].url}
-                        name={`${item.Year} ${item.Make} ${item['Model Group']} ${item.Trim}`}
-                        lot={item['Lot number']}
-                        price={item['High Bid =non-vix,Sealed=Vix']}
-                        highlights={item['Runs/Drives']}
-                        damage={item['Damage Description']}
-                        odometer={`${item['Odometer']} ${
-                          item['Odometer Brand'] === 'A' ? '(ACTUAL)' : '(NOT ACTUAL)'
-                        } `}
-                        buyNow={item['Buy-It-Now Price']}
-                        auctionDate={item['Sale Date M/D/CY']}
-                        creationDate={item['Create Date/Time'].slice(0, 10)}
-                      />
-                    );
+                    if (!item.A.status)
+                      return (
+                        <CarCard
+                          url={`${location.search}&`}
+                          key={item['Lot number']}
+                          mode={context.darkMode}
+                          image={item.A.lotImages[0].link[0].url}
+                          name={`${item.Year} ${item.Make} ${item['Model Group']} ${item.Trim}`}
+                          lot={item['Lot number']}
+                          price={item['High Bid =non-vix,Sealed=Vix']}
+                          highlights={item['Runs/Drives']}
+                          damage={item['Damage Description']}
+                          odometer={`${item['Odometer']} ${
+                            item['Odometer Brand'] === 'A' ? '(ACTUAL)' : '(NOT ACTUAL)'
+                          } `}
+                          buyNow={item['Buy-It-Now Price']}
+                          auctionDate={item.armAuctDate}
+                          creationDate={item['Create Date/Time'].slice(0, 10)}
+                          time={item['Sale time (HHMM)']}
+                          timeZone={item['Time Zone']}
+                        />
+                      );
                   })}
                 </>
               )}

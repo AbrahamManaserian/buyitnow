@@ -16,7 +16,20 @@ export default function CopartCars() {
     // console.log('carsRogue.cars');
     async function getCars() {
       const car = await getCar('HONDA', 'ACCORD', 'buynow');
-      setAccordBuyNow(car.data);
+      const arr = car.data.map((item) => {
+        const timeDifference = item['Time Zone'] === 'PDT' ? 12 * 3600 * 1000 : 8 * 3600 * 1000;
+        // console.log(timeDifference);
+        const date = new Date(
+          +new Date(
+            +item['Sale Date M/D/CY'].slice(0, 4),
+            +item['Sale Date M/D/CY'].slice(4, 6) - 1,
+            +item['Sale Date M/D/CY'].slice(6, 8),
+            +item['Sale time (HHMM)'].slice(0, 2)
+          ) + timeDifference
+        );
+        return { ...item, armAuctDate: date };
+      });
+      setAccordBuyNow(arr);
     }
     getCars();
   }, []);
@@ -66,7 +79,6 @@ export default function CopartCars() {
                       <CarCard
                         key={item['Lot number']}
                         mode={context.darkMode}
-                        href={'as'}
                         image={item.A.lotImages[0].link[0].url}
                         name={`${item.Year} ${item.Make} ${item['Model Group']} ${item.Trim}`}
                         lot={item['Lot number']}
@@ -80,6 +92,9 @@ export default function CopartCars() {
                         auctionDate={item['Sale Date M/D/CY']}
                         url="/copart-cars/search?"
                         creationDate={item['Create Date/Time'].slice(0, 10)}
+                        time={item['Sale time (HHMM)']}
+                        timeZone={item['Time Zone']}
+                        auctionDate={item.armAuctDate}
                       />
                     );
                   }

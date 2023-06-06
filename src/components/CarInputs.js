@@ -16,17 +16,17 @@ const makeModels = {
     'A3',
     'R8',
     'RS3',
-    'S4/RS4',
+    'S4-RS4',
     'A7',
     'A6',
-    'S5/RS5',
+    'S5-RS5',
     'E-TRON',
     'Q8',
     'SQ5 SPORTB',
     'S3',
     'A8',
     'S8',
-    'S7/RS7',
+    'S7-RS7',
     'E-TRON CHR',
     'SQ7',
     'E-TRON GT',
@@ -437,187 +437,6 @@ const makeModels = {
   ],
 };
 
-const makes = {
-  Bmw: {
-    name: 'BMW',
-    models: [
-      {
-        name: '3 Series',
-        fetchName: '3',
-      },
-      {
-        name: '5 Series',
-        fetchName: '5',
-      },
-      {
-        name: '7 Series',
-        fetchName: '7',
-      },
-
-      {
-        name: 'X3',
-        fetchName: 'x3',
-      },
-      {
-        name: 'X5',
-        fetchName: 'x5',
-      },
-      {
-        name: 'X6',
-        fetchName: 'x6',
-      },
-    ],
-  },
-  Honda: {
-    name: 'Honda',
-    models: [
-      {
-        name: 'Accord',
-        fetchName: 'Accord',
-      },
-    ],
-  },
-  Hyundai: {
-    name: 'Hyundai',
-    models: [
-      {
-        name: 'Sonata',
-        fetchName: 'Sonata',
-      },
-    ],
-  },
-  Jeep: {
-    name: 'Jeep',
-    models: [
-      {
-        name: 'Compass',
-        fetchName: 'Compass',
-      },
-      {
-        name: 'Cherokee',
-        fetchName: 'Cherokee',
-      },
-      {
-        name: 'Grand Cherokee',
-        fetchName: 'GrandCherokee',
-      },
-      {
-        name: 'Wrangler',
-        fetchName: 'Wrangler',
-      },
-      {
-        name: 'Wrangler Unlimited',
-        fetchName: 'WranglerUnlimited',
-      },
-    ],
-  },
-  Kia: {
-    name: 'Kia',
-    models: [
-      {
-        name: 'Forte',
-        fetchName: 'Forte',
-      },
-      {
-        name: 'Optima',
-        fetchName: 'Optima',
-      },
-      {
-        name: 'Rio',
-        fetchName: 'Rio',
-      },
-
-      {
-        name: 'Sorento',
-        fetchName: 'Sorento',
-      },
-    ],
-  },
-  Mercedes: {
-    name: 'Mercedes-Benz',
-    models: [
-      {
-        name: 'C-Class',
-        fetchName: 'CBuyNow',
-      },
-      {
-        name: 'CLA-Class',
-        fetchName: 'ClaBuyNow',
-      },
-      {
-        name: 'E-Class',
-        fetchName: 'EBuyNow',
-      },
-      {
-        name: 'G-Class',
-        fetchName: 'GBuyNow',
-      },
-      {
-        name: 'GLE-Class',
-        fetchName: 'GleBuyNow',
-      },
-      {
-        name: 'S-Class',
-        fetchName: 'SBuyNow',
-      },
-    ],
-  },
-  Mitsubishi: {
-    name: 'Mitsubishi',
-    models: [
-      {
-        name: 'Outlander',
-        fetchName: 'Outlander',
-      },
-      {
-        name: 'Outlander Sport',
-        fetchName: 'OutlanderSport',
-      },
-    ],
-  },
-  Nissan: {
-    name: 'Nissan',
-    models: [
-      {
-        name: 'Armada',
-        fetchName: 'Armada',
-      },
-      {
-        name: 'Kicks',
-        fetchName: 'Kicks',
-      },
-      {
-        name: 'Murano',
-        fetchName: 'Murano',
-      },
-      {
-        name: 'Pathfinder',
-        fetchName: 'Pathfinder',
-      },
-      {
-        name: 'Rogue',
-        fetchName: 'RogueBuyNow',
-      },
-      {
-        name: 'Rogue Sport',
-        fetchName: 'RogueSportBuyNow',
-      },
-    ],
-  },
-  Toyota: {
-    name: 'Toyota',
-    models: [
-      {
-        name: 'Camry',
-        fetchName: 'Camry',
-      },
-      {
-        name: 'Corolla',
-        fetchName: 'Corolla',
-      },
-    ],
-  },
-};
 
 export function CarInputs({ auction, make, model }) {
   const url = new URL(window.location.href);

@@ -188,17 +188,7 @@ export default function Filter({
         </Typography>
         {close && <CloseIcon onClick={close} sx={{ cursor: 'pointer' }} />}
       </Grid>
-      <Grid item xs={6} sm={4} md={3} lg={12}>
-        <Button
-          onClick={() => {
-            url.searchParams.set('key', 'buynow');
-            navigate(`${url.search}`);
-          }}
-          variant={url.searchParams.get('key') === 'buynow' ? 'contained' : 'outlined'}
-        >
-          Buy it now
-        </Button>
-      </Grid>
+
       <Grid item xs={6} sm={4} md={3} lg={12}>
         <FormControl size="small" sx={{ width: '100%', mt: '15px' }}>
           <InputLabel>Year</InputLabel>

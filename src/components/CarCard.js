@@ -110,10 +110,20 @@ export default function CarCard({
   creationDate,
 }) {
   const cheCkHighlights = highlights === 'Run & Drive Verified' ? 'R' : 'E';
-  const date = intervalToDuration({
-    start: new Date(),
-    end: new Date(+auctionDate.slice(0, 4), +auctionDate.slice(4, 6), +auctionDate.slice(6, 8)),
-  });
+  // console.log(timeDifference);
+  let date = {};
+  if (new Date() - auctionDate < 0) {
+    date = intervalToDuration({
+      start: new Date(),
+      end: auctionDate,
+    });
+  } else if (new Date() - auctionDate > 4 * 3600 * 1000) {
+    date.starts = 'Auction ended';
+  } else {
+    date.starts = 'Auction startes';
+  }
+
+  // console.log(auctionDate);
   const dateDistance = differenceInHours(new Date(), new Date(creationDate));
   //   console.log(date);
   return (
@@ -160,15 +170,17 @@ export default function CarCard({
               Current Bid
             </Typography>
 
-            <Typography sx={{ fontSize: '15px', fontWeight: 600 }}>${price}</Typography>
+            <Typography sx={{ fontSize: '15px', fontWeight: 600 }}>${price}0</Typography>
           </Box>
           <Button1 buynow={buyNow} size="small" variant="contained" color="success" ml={1}>
             Buy now
             <Typography sx={{ fontSize: '15px', fontWeight: 600, pl: '2px' }}>-</Typography>
-            <Typography sx={{ fontSize: '15px', fontWeight: 600, pl: '2px' }}>{buyNow}</Typography>
+            <Typography sx={{ fontSize: '15px', fontWeight: 600, pl: '2px' }}>${buyNow}0</Typography>
           </Button1>
-          <Typography color="error" sx={{ fontSize: '13px', fontWeight: 500 }}>
-            Auction in {date.days}D {date.hours}H {date.minutes}min
+          <Typography color={!date.starts ? 'error' : 'info.dark'} sx={{ fontSize: '13px', fontWeight: 500 }}>
+            {!date.starts
+              ? 'Auction in ' + date.days + 'D ' + date.hours + 'H ' + date.minutes + 'min'
+              : date.starts}
           </Typography>
         </CardContainer>
       </Link>
