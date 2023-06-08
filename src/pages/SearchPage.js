@@ -49,7 +49,7 @@ export default function SearchPage() {
 
   // console.log(filteredCars);
   const handleChangeSortBy = (e) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     setSortBy(e.target.value);
     if (e.target.value === 'Year') {
       setFilteredCars({
@@ -77,7 +77,7 @@ export default function SearchPage() {
       setFilteredCars({
         ...filteredCars,
         cars: filteredCars.cars.sort((p1, p2) => {
-          return +p1.armAuctDate < +p2.armAuctDate ? 1 : +p1.armAuctDate > +p2.armAuctDate ? -1 : 0;
+          return +p1.armAuctDate > +p2.armAuctDate ? 1 : +p1.armAuctDate < +p2.armAuctDate ? -1 : 0;
         }),
       });
       return;
