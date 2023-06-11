@@ -1,24 +1,12 @@
-import {
-  ButtonGroup,
-  FormControl,
-  Grid,
-  InputLabel,
-  LinearProgress,
-  MenuItem,
-  Select,
-  Stack,
-  Tab,
-  Tabs,
-  Typography,
-} from '@mui/material';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
-import { Fragment, useContext, useEffect, useState } from 'react';
+import { FormControl, Grid, InputLabel, LinearProgress, MenuItem, Select, Typography } from '@mui/material';
+import { doc, getDoc } from 'firebase/firestore';
+import { useContext, useEffect, useState } from 'react';
 import { db } from '../firebase';
 import { format } from 'date-fns';
 import CarCard from '../components/CarCard';
 import { AppContext } from '../App';
 import { CarInputs } from '../components/CarInputs';
-import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import CopartCarPage from './CopartCarPage';
 import Filter from '../components/Filter';
 import Box from '@mui/material/Box';
@@ -432,7 +420,7 @@ export default function SearchPage() {
             </Grid>
           </Grid>
         ) : (
-          <CopartCarPage carItems={cars.cars} />
+          <CopartCarPage carItems={cars.cars} mode={context.darkMode} />
         )}
       </Grid>
     </Grid>
