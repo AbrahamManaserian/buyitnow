@@ -81,7 +81,7 @@ export default function Footer({ mode }) {
           <WhatsappIcon />
         </a>
 
-        <a target="_blank" style={{ marginRight: '15px' }} href="viber://chat/?number=37494225557">
+        <a target="_blank" style={{ marginRight: '15px' }} href="viber://chat/?number=37477055777">
           <ViberIcon />
         </a>
       </Grid>

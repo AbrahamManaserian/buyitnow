@@ -109,7 +109,7 @@ export default function OrderDialog(item) {
                   >
                     <WhatsappIcon />
                   </a>
-                  <a target="_blank" style={{ marginRight: '10px' }} href="viber://chat/?number=37494225557">
+                  <a target="_blank" style={{ marginRight: '10px' }} href="viber://chat/?number=37477055777">
                     <ViberIcon />
                   </a>
                 </Box>
