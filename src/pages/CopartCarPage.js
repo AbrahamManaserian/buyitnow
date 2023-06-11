@@ -1,44 +1,19 @@
-import { Link } from 'react-router-dom';
-import { useContext, useEffect, useState } from 'react';
-import {
-  Box,
-  Button,
-  Collapse,
-  Divider,
-  FormControl,
-  FormHelperText,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Paper,
-  Select,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Box, Grid, Typography } from '@mui/material';
 import { format, intervalToDuration } from 'date-fns';
 import { BackIcon, ForwardIcon } from '../SVGIcons';
 
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import calculateClearanceFee from '../calculateClearanceFee1';
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import OrderDialog from '../components/OrderDialog';
 import MainCopartCard from '../components/MainCopartCard';
 import SaleCard from '../components/SaleCard';
 import ClearanceCalculation from '../components/ClearanceCalculation';
 import CardAlertService from '../components/CardAlertService';
-import VinCheckCard from '../components/VinCheckCard';
-
-const years = [2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016];
-const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-
-export default function CopartCarPage({ carItems }) {
+export default function CopartCarPage({ carItems, mode }) {
   const url = new URL(window.location.href);
   const [item, setItem] = useState({ 'Buy-It-Now Price': 0 });
   const [price, setPrice] = useState(0);
   const [auctionDate, setAuctionDate] = useState({ days: '', hours: '', minutes: '' });
-  const [zoom, setZoom] = useState(false);
+  // const [zoom, setZoom] = useState(false);
   const [images, setImages] = useState([]);
   const [imgIndex, setImgIndex] = useState(-1);
   const [yearMonth, setYearMonth] = useState({ year: '', month: '' });
@@ -185,8 +160,7 @@ export default function CopartCarPage({ carItems }) {
   return (
     <>
       {item.A && (
-        <Grid item container xs={12} p={2} pb={50}>
-          {/* Glxavor nkar  */}
+        <Grid item container xs={12} p={2}>
           <Grid item xs={12} container flexWrap={true} pb={1}>
             {/* Glxavor nkar  */}
             <Box sx={{ display: 'flex', alignItems: 'flex-end', width: '100%' }}>
@@ -230,7 +204,7 @@ export default function CopartCarPage({ carItems }) {
               | Sale Date: {format(item.armAuctDate, 'iii. PP kk:mm:ss')}
             </Typography>
           </Grid>
-          {/* Puchur nkarner u slaqner */}
+
           <Grid alignContent="flex-start" item container xs={12} sm={6} md={7}>
             {/* Puchur nkarner u slaqner */}
             <Grid alignContent="flex-start" item container xs={12} pb={1} sx={{ position: 'relative' }}>
@@ -357,14 +331,15 @@ export default function CopartCarPage({ carItems }) {
               yearMonth={yearMonth}
               handleChangeYearMonth={handleChangeYearMonth}
               item={item}
+              mode={mode}
             />
-            <VinCheckCard />
           </Grid>
           <Grid item container xs={12} sm={6} md={5} alignContent="flex-start" px={{ xs: 0, sm: 2, md: 4 }}>
             <MainCopartCard item={item} />
             <SaleCard item={item} auctionDate={auctionDate} />
             <CardAlertService item={item} />
           </Grid>
+
           <Grid item xs={12}>
             <Typography>Abraham</Typography>
           </Grid>

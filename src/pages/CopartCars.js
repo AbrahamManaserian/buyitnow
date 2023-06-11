@@ -89,7 +89,7 @@ export default function CopartCars() {
                           item['Odometer Brand'] === 'A' ? '(ACTUAL)' : '(NOT ACTUAL)'
                         } `}
                         buyNow={item['Buy-It-Now Price']}
-                        auctionDate={item['Sale Date M/D/CY']}
+                        // auctionDate={item['Sale Date M/D/CY']}
                         url="/copart-cars/search?"
                         creationDate={item['Create Date/Time'].slice(0, 10)}
                         time={item['Sale time (HHMM)']}

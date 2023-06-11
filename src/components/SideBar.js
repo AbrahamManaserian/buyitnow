@@ -6,6 +6,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import { getText, textSideBar } from '../texts';
 import { AppContext } from '../App';
+import Image1 from '../images/logo12.png';
 import {
   AboutIcon,
   ArmFlag,
@@ -88,7 +89,7 @@ export default function SideBar({ open, toggleDrawer, hide }) {
         )}
       </Box1>
       <Box sx={{ display: 'flex', width: '100%', flexDirection: 'column', overflow: 'scroll' }}>
-        <Link style={{ textDecoration: 'none', color: 'inherit' }} to="/">
+        {/* <Link style={{ textDecoration: 'none', color: 'inherit' }} to="/">
           <Typography
             sx={{
               m: '3px 20px 5px 10px ',
@@ -106,7 +107,8 @@ export default function SideBar({ open, toggleDrawer, hide }) {
           >
             {menuLength ? 'BUY IT NOW' : 'BIN'}
           </Typography>
-        </Link>
+        </Link> */}
+        <img style={{ width: '100%', height: 'auto' }} src={Image1} />
         <Typography
           sx={{ textOverflow: 'ellipsis', overflow: 'hidden' }}
           p="20px 0 5px 10px"

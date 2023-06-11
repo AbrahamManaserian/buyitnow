@@ -13,6 +13,8 @@ import {
   Typography,
 } from '@mui/material';
 import OrderDialog from './OrderDialog';
+import { Link } from 'react-router-dom';
+import { ClearVinIcon, EpicVinIcon } from '../SVGIcons';
 
 const years = [2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016];
 const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -26,6 +28,7 @@ export default function ClearanceCalculation({
   yearMonth,
   handleChangeYearMonth,
   item,
+  mode,
 }) {
   return (
     <Grid
@@ -197,6 +200,36 @@ export default function ClearanceCalculation({
                 </Button>
               </Grid>
             </Collapse>
+          </Grid>
+          <Grid item container xs={12} mt="15px">
+            <Typography
+              sx={{ width: '100%', fontSize: { xs: '11px', sm: '14px' }, textAlign: 'justify', mb: '10px' }}
+            >
+              Get access to Copart vehicle history reports so you know what to expect before you buy!
+            </Typography>
+            {/* <Box sx={{ display: 'flex', alignContent: 'center' }}> */}
+            <EpicVinIcon />
+            <Link
+              style={{
+                fontSize: '14px',
+                marginLeft: '4px',
+                marginRight: '10px',
+                color: mode === 'dark' ? '#9fa8da' : '#3949ab',
+              }}
+              to="asd"
+            >
+              EpicVin Report
+            </Link>
+            {/* </Box> */}
+            {/* <Box sx={{ display: 'flex', alignContent: 'center' }}> */}
+            <ClearVinIcon />
+            <Link
+              style={{ fontSize: '14px', marginLeft: '4px', color: mode === 'dark' ? '#9fa8da' : '#3949ab' }}
+              to="asd"
+            >
+              ClearVin Report
+            </Link>
+            {/* </Box> */}
           </Grid>
         </Grid>
       </Paper>

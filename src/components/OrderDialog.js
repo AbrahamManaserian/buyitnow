@@ -90,18 +90,28 @@ export default function OrderDialog(item) {
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Typography>Social Network</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <div style={{ marginRight: '10px', cursor: 'pointer' }} onClick={() => console.log('asd')}>
+                  <a
+                    target="_blank"
+                    style={{ marginRight: '10px' }}
+                    href="https://www.instagram.com/buyitnow_armenia/"
+                  >
                     <InstagramIcon />
-                  </div>
-                  <div style={{ marginRight: '10px', cursor: 'pointer' }} onClick={() => console.log('asd')}>
+                  </a>
+                  <a target="_blank" style={{ marginRight: '10px' }} href="https://www.facebook.com/">
                     <FacebookIcon />
-                  </div>
-                  <div style={{ marginRight: '10px', cursor: 'pointer' }} onClick={() => console.log('asd')}>
+                  </a>
+
+                  <a
+                    style={{ marginRight: '10px' }}
+                    target="_blank"
+                    aria-label="Chat on WhatsApp"
+                    href="https://wa.me/37477055777"
+                  >
                     <WhatsappIcon />
-                  </div>
-                  <div style={{ marginRight: '0', cursor: 'pointer' }} onClick={() => console.log('asd')}>
+                  </a>
+                  <a target="_blank" style={{ marginRight: '10px' }} href="viber://chat/?number=37494225557">
                     <ViberIcon />
-                  </div>
+                  </a>
                 </Box>
               </Box>
               <Divider />

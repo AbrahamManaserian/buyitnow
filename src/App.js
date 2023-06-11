@@ -233,10 +233,12 @@ function App() {
       >
         <Grid item xs container alignItems="flex-start">
           <SideBar open="none" />
-          <Grid item xs container>
-            <BarMenu />
-            <Outlet />
-            {/* <Footer /> */}
+          <Grid sx={{ minHeight: '100vh' }} alignContent="space-between" item xs container>
+            <Grid item xs container>
+              <BarMenu />
+              <Outlet />
+            </Grid>
+            <Footer mode={darkMode} />
           </Grid>
         </Grid>
       </AppContext.Provider>
