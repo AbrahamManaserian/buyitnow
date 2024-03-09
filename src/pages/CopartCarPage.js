@@ -29,6 +29,7 @@ export default function CopartCarPage({ carItems, mode }) {
   });
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     if (item['Buy-It-Now Price']) {
       //   console.log(+item.Engine.slice(0, 3));
       const obj = calculateClearanceFee(
@@ -340,9 +341,9 @@ export default function CopartCarPage({ carItems, mode }) {
             <CardAlertService item={item} />
           </Grid>
 
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <Typography>Abraham</Typography>
-          </Grid>
+          </Grid> */}
         </Grid>
       )}
     </>

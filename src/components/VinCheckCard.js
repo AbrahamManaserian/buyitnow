@@ -27,15 +27,16 @@ export default function VinCheckCard() {
             p: '8px',
           }}
         >
-          <Typography sx={{ fontWeight: 700, color: 'white' }}>Order Products & Services</Typography>
+          <Typography sx={{ fontWeight: 700, color: 'white' }}>Vehicle history reports</Typography>
         </Box>
         <Grid item container xs={12} p="8px">
           <Grid
             borderRight={0.1}
-            pr="10px"
+            p="10px"
             item
             container
-            xs={6}
+            xs={12}
+            sm={6}
             justifyContent="flex-start"
             alignContent="center"
           >
@@ -51,7 +52,7 @@ export default function VinCheckCard() {
               EpicVin Report
             </Link>
           </Grid>
-          <Grid pl="10px" item container xs={6} justifyContent="flex-start" alignContent="center">
+          <Grid p="10px" item container xs={12} sm={6} justifyContent="flex-start" alignContent="center">
             <Typography
               sx={{ width: '100%', fontSize: { xs: '11px', sm: '14px' }, textAlign: 'justify', pb: '5px' }}
             >

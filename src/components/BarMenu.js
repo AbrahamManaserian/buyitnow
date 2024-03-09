@@ -58,12 +58,19 @@ export function UserMenu() {
       >
         <Link
           style={{ color: 'inherit', display: 'block', width: '100%', textDecoration: 'none' }}
-          to="/admin"
+          to="/georgi"
         >
           <MenuItem onClick={handleClose}>Profile</MenuItem>
         </Link>
         <MenuItem onClick={handleClose}>My account</MenuItem>
         <MenuItem onClick={signOutUser}>Logout</MenuItem>
+
+        <Link
+          style={{ color: 'inherit', display: 'block', width: '100%', textDecoration: 'none' }}
+          to="/admin"
+        >
+          <MenuItem onClick={handleClose}>Admin</MenuItem>
+        </Link>
       </Menu>
     </Box>
   );

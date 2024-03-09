@@ -215,7 +215,7 @@ export const getDesignTokens = (mode) => ({
 export const AppContext = createContext();
 function App() {
   let user = useGetUser();
-  const [language, setLanguage] = useState(localStorage.getItem('language') || '1');
+  const [language, setLanguage] = useState(localStorage.getItem('language') || '2');
   const [darkMode, setDarkMode] = useState(localStorage.getItem('darkMode') || 'dark');
   const theme = createTheme(getDesignTokens(darkMode || 'dark'));
 

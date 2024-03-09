@@ -9,7 +9,7 @@ import About from './pages/About';
 import HomePage from './pages/HomePage';
 import SigninPage from './pages/SignInPage';
 import SignUp from './pages/SignUpPage';
-import AdminPage from './pages/AdminPage';
+// import UserPage from './pages/UserPage';
 import CustomersPage from './pages/CustomersPage';
 import PartnersPage from './pages/PartnersPage';
 import NewsPage from './pages/NewsPage';
@@ -21,6 +21,10 @@ import InGeorgiaCars from './pages/InGeorgiaCars';
 import EuropeCars from './pages/EuropeCars';
 import CopartCarPage from './pages/CopartCarPage';
 import SearchPage from './pages/SearchPage';
+import HelpPage from './pages/HelpPage';
+import AlertPage from './pages/AlertPge';
+// import AdminPage from './pages/AdminPage';
+import PurchasedCars from './pages/PurchasedCars';
 
 const router = createBrowserRouter([
   {
@@ -37,12 +41,30 @@ const router = createBrowserRouter([
         element: <About />,
       },
       {
+        path: '/alert',
+        element: <AlertPage />,
+      },
+      {
+        path: '/help',
+        element: <HelpPage />,
+      },
+      {
         path: '/signIn',
         element: <SigninPage />,
       },
       {
         path: '/admin',
-        element: <AdminPage />,
+        // element: <AdminPage />,
+        element: <div>Admin page</div>,
+      },
+      {
+        path: '/purchased-cars',
+        element: <PurchasedCars />,
+      },
+      {
+        path: '/georgi',
+        // element: <UserPage />,
+        element: <div>Admin page</div>,
       },
       {
         path: '/signup',
@@ -93,17 +115,17 @@ const router = createBrowserRouter([
         element: <InArmeniaCars />,
       },
       {
-        path: '/on-road',
+        path: '/en-route',
         element: <OnRoad />,
       },
       {
         path: '/partners',
         element: <PartnersPage />,
       },
-      {
-        path: '/about/asd',
-        element: <div>Anasunikkk</div>,
-      },
+      // {
+      //   path: '/about/asd',
+      //   element: <div>Anasunikkk</div>,
+      // },
     ],
   },
 ]);

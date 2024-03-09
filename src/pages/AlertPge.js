@@ -1,15 +1,14 @@
-import { Box, Button, Collapse, Link, Paper, TextField, Typography } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
-import { useState } from 'react';
-import SelectSmall from './SelectSmall';
-import { format } from 'date-fns';
+import { Box, Button, Collapse, Grid, TextField, Typography } from '@mui/material';
 import { doc, setDoc, updateDoc } from 'firebase/firestore';
+import { useState } from 'react';
 import { db } from '../firebase';
+import SelectSmall from '../components/SelectSmall';
+import { format } from 'date-fns';
 
 const typeItems = ['Email', 'Text Message'];
 const frequencyItems = ['Daily', 'Weekly'];
 
-export default function CardAlertService({ item }) {
+export default function AlertPage() {
   const [alertType, setAlertType] = useState('');
   const [frequency, setFrequency] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -23,7 +22,7 @@ export default function CardAlertService({ item }) {
       try {
         await updateDoc(doc(db, 'alerts', 'unregistered', key, key), {
           [+Date.now()]: {
-            item: item,
+            // item: item,
             firstName: firstName,
             lastName: lastName,
             email: mailNumber.mail,
@@ -41,7 +40,7 @@ export default function CardAlertService({ item }) {
       } catch (error) {
         await setDoc(doc(db, 'alerts', 'unregistered', key, key), {
           [+Date.now()]: {
-            item: item,
+            // item: item,
             firstName: firstName,
             lastName: lastName,
             email: mailNumber.mail,
@@ -71,44 +70,28 @@ export default function CardAlertService({ item }) {
       // return;
     }
   };
-
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        width: '100%',
-        mt: 2,
-        maxWidth: { xs: '100%', sm: 360 },
-        '& > :not(style)': {
-          width: '100%',
-          overflow: 'hidden',
-          // p: 1,
-        },
-      }}
-    >
-      <Paper elevation={3}>
-        <Box
-          sx={{
-            display: 'flex',
-            borderRadius: '3px 3px 0 0',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            // width: '110%',
-            bgcolor: 'primary.dark',
-            // m: '-8px 0 0 -8px',
-            p: '8px',
-          }}
-        >
-          <Typography sx={{ fontWeight: 700, color: 'white' }}>Alerts for Similar Vehicles</Typography>
-          <Link
-            component={RouterLink}
-            style={{ color: 'white', fontSize: '10px', cursor: 'pointer' }}
-            to="/alert"
-          >
-            More
-          </Link>
-          {/* <Typography sx={{ fontWeight: 700, color: 'white', fontSize: '8px' }}>More</Typography> */}
-        </Box>
+    <Grid item xs={12} container>
+      <Grid item xs={6} container direction="column" p="10px">
+        <Typography fontSize="18px" fontWeight={700} pb="20px">
+          Don’t see the vehicle you want? Sign up for Buy It Now Vehicle Alerts.
+        </Typography>
+        <Typography fontSize="16px" pb="20px">
+          Vehicle Alerts are emails or text messages notifying you of the latest vehicles we add to our
+          inventory based on what you're looking for.
+        </Typography>
+        <Typography fontSize="16px" pb="20px">
+          You can cancel alerts at any time or change the frequency to suit your needs. You can also set up as
+          many alerts as you want.
+        </Typography>
+        <Typography fontSize="16px" pb="20px">
+          By signing up for Vehicle Alerts, you are consenting to receive Vehicle Alert emails or text
+          messages. To edit or remove/unsubscribe from a Vehicle Alert email, use the links within the “Manage
+          Alerts” section of that email. To unsubscribe from a Vehicle Alert text message, simply text “STOP”
+          to the Copart text message you receive.
+        </Typography>
+      </Grid>
+      <Grid item xs={6} container direction="column" p="10px">
         <Box
           sx={{
             display: 'flex',
@@ -209,7 +192,7 @@ export default function CardAlertService({ item }) {
             {/* <TextField size="small" fullWidth label="fullWidth" /> */}
           </Collapse>
         </Box>
-        <Box
+        {/* <Box
           sx={{
             display: 'flex',
             justifyContent: 'flex-end',
@@ -219,12 +202,13 @@ export default function CardAlertService({ item }) {
             p: '8px',
             // maxWidth: { xs: '100%', sm: 360 },
           }}
-        >
-          <Button onClick={handleClick} size="small">
-            Set Alert
-          </Button>
-        </Box>
-      </Paper>
-    </Box>
+        > */}
+        <Button onClick={handleClick} size="small">
+          Set Alert
+        </Button>
+        {/* </Box> */}
+      </Grid>
+      {/* <Typography>Alert page</Typography> */}
+    </Grid>
   );
 }

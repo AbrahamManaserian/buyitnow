@@ -500,13 +500,15 @@ export function CarInputs({ auction, make, model }) {
             label="Model"
             onChange={handleChange}
           >
-            {makeModels[inputs.make]?.map((item, index) => {
-              return (
-                <MenuItem key={index} value={item}>
-                  {item}
-                </MenuItem>
-              );
-            })}
+            {makeModels[inputs.make]
+              ?.sort((a, b) => a.localeCompare(b))
+              .map((item, index) => {
+                return (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                );
+              })}
           </Select>
         </FormControl>
         <Button

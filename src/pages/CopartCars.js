@@ -38,7 +38,7 @@ export default function CopartCars() {
 
   return (
     <CarsContext.Provider value={accordBuyNow}>
-      <Grid item xs={12} container>
+      <Grid sx={{ minHeight: '100vh' }} alignContent="flex-start" item xs={12} container>
         {/* <Outlet /> */}
         {!location.search ? (
           <Grid item xs={12} container>

@@ -159,29 +159,30 @@ export default function SideBar({ open, toggleDrawer, hide }) {
               fontWeight: location.pathname === '/europe-cars' ? 500 : 400,
             }}
           >
-            Europe
+            {/* Europe */}
+            {getText('europe', context.language, textSideBar)}
           </Typography>
         </Link>
         <Link
           style={{
             flexDirection: menuLength ? 'row' : 'column',
-            backgroundColor: location.pathname === '/on-road' ? '#e8f5e9' : '',
+            backgroundColor: location.pathname === '/en-route' ? '#e8f5e9' : '',
           }}
           className="linko"
-          to="/on-road"
+          to="/en-route"
         >
           <Box sx={{ padding: '0 15px 0 15px', display: 'flex' }}>
             <CargoIcon
               color={
-                context.darkMode === 'light' || location.pathname === '/on-road' ? '#34495c ' : '#84ffff'
+                context.darkMode === 'light' || location.pathname === '/en-route' ? '#34495c ' : '#84ffff'
               }
             />
           </Box>
           <Typography
-            color={location.pathname === '/on-road' ? 'greenCustome.main' : 'neutral.main'}
+            color={location.pathname === '/en-route' ? 'greenCustome.main' : 'neutral.main'}
             sx={{
               fontSize: menuLength ? '16px' : '10px',
-              fontWeight: location.pathname === '/on-road' ? 500 : 400,
+              fontWeight: location.pathname === '/en-route' ? 500 : 400,
             }}
           >
             {getText('onRoad', context.language, textSideBar)}

@@ -169,7 +169,7 @@ export default function ClearanceCalculation({
                 <Typography
                   sx={{ width: '100%', textAlign: 'center', fontSize: '12px', color: 'red', py: 1 }}
                 >
-                  If the year of the vin code in the picture does not match, please correct it!
+                  If the year of the vehicle in the picture does not match, please correct it!
                 </Typography>
                 <FormControl variant="standard" sx={{ mx: 1, minWidth: 80 }}>
                   <InputLabel>Year</InputLabel>

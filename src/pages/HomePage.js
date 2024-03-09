@@ -27,6 +27,13 @@ export default function HomePage() {
       // alignContent="flex-end"
       alignItems="center"
     >
+      <img
+        // style="border:0"
+        src="https://affiliate.epicvin.com/scripts/014iuuh?a_aid=0rg1m775c70e2&amp;a_bid=11110002"
+        width="1"
+        height="1"
+        alt=""
+      />
       <img style={{ width: '20%', height: 'auto' }} src={Image2} />
       <Typography fontWeight={800} variant="h3" alignSelf="center">
         Coming soon

@@ -44,7 +44,7 @@ export const textSideBar = {
   },
   onRoad: {
     am: 'Ճանապարհին',
-    en: 'On the raod',
+    en: 'En route',
     ru: 'На дороге',
   },
   general: {
@@ -56,6 +56,11 @@ export const textSideBar = {
     am: 'Վրաստանում',
     en: 'In Georgia',
     ru: 'В Грузии',
+  },
+  europe: {
+    am: 'Եվրոպայում',
+    en: 'In Europe',
+    ru: 'В Европе',
   },
   inArmenia: {
     am: 'Հայաստանում',

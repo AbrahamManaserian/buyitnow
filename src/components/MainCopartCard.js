@@ -115,6 +115,14 @@ export default function MainCopartCard({ item }) {
                         ? 'CERT OF TITLE-SLVG REBLD'
                         : item['Sale Title Type'] === 'SV'
                         ? 'SALVAGE VEHICLE TITLE'
+                        : item['Sale Title Type'] === 'CQ'
+                        ? 'CERT OF TITLE OR SALVAGE ACQ'
+                        : item['Sale Title Type'] === 'CT'
+                        ? 'CERTIFICATE OF TITLE'
+                        : item['Sale Title Type'] === 'SM'
+                        ? ' MV-907A SALVAGE CERTIFICATE'
+                        : item['Sale Title Type'] === 'SH'
+                        ? ' CLEAN TITLE W/SALVAGE HISTORY'
                         : 'BILL OF SALE'
                     }`}
                   />

@@ -1,12 +1,12 @@
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography, Link } from '@mui/material';
 import { Copyright } from '../pages/HomePage';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
 import { FacebookIcon, InstagramIcon, ViberIcon, WhatsappIcon } from '../SVGIcons';
+import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 
 export default function Footer({ mode }) {
-  const styleLink = { marginBottom: '7px', color: mode === 'dark' ? '#9fa8da' : '#3949ab' };
   return (
     <Grid p="30px 10px 30px 10px" container item xs={12}>
       <Grid p={1} pr={5} item xs={12} sm={3} container direction="column">
@@ -18,34 +18,34 @@ export default function Footer({ mode }) {
       </Grid>
       <Grid p={1} item xs={6} sm={3} container direction="column">
         <Typography sx={{ fontWeight: 900, fontSize: 18, mb: '10px' }}> About </Typography>
-        <Link style={styleLink} to="">
+        <Link mb="7px" component={RouterLink} to="/about#projects">
           Projects
         </Link>
-        <Link style={styleLink} to="">
+        <Link mb="7px" component={RouterLink} to="/about">
           About Us
         </Link>
-        <Link style={styleLink} to="">
+        <Link mb="7px" component={RouterLink} to="/about#upcoming-projects">
           Upcoming Projects
         </Link>
-        <Link style={styleLink} to="">
+        <Link mb="7px" component={RouterLink} to="/about#services">
           Services
         </Link>
       </Grid>
       <Grid p={1} item xs={6} sm={3} container direction="column">
         <Typography sx={{ fontWeight: 900, fontSize: 18, mb: '10px' }}> Help </Typography>
-        <Link style={styleLink} to="">
+        <Link mb="7px" component={RouterLink} to="/help#find-vehicle">
           Find Vehicle
         </Link>
-        <Link style={styleLink} to="">
+        <Link mb="7px" component={RouterLink} to="/help#calculate-clearance">
           Calculate Clearance
         </Link>
-        <Link style={styleLink} to="">
+        <Link mb="7px" component={RouterLink} to="/help#calculate-shipment">
           Calculate Shipment
         </Link>
-        <Link style={styleLink} to="">
+        <Link mb="7px" component={RouterLink} to="/alert">
           Get Alerts
         </Link>
-        <Link style={styleLink} to="">
+        <Link mb="7px" component={RouterLink} to="/help#add-vehicle">
           Add Vehicle
         </Link>
       </Grid>
@@ -57,11 +57,16 @@ export default function Footer({ mode }) {
         </Box>
         <Box sx={{ display: 'flex', alignContent: 'center', mb: '10px' }}>
           <MailOutlinedIcon />
-          <Typography sx={{ pl: '10px', fontSize: '15px' }}>info@buyitnow.am</Typography>
+          <Link sx={{ pl: '10px', fontSize: '15px' }} href="mailto:info@buyitnow.am">
+            info@buyitnow.am
+          </Link>
+          {/* <Typography sx={{ pl: '10px', fontSize: '15px' }}>info@buyitnow.am</Typography> */}
         </Box>
         <Box sx={{ display: 'flex', alignContent: 'center', mb: '10px' }}>
-          <MailOutlinedIcon />
-          <Typography sx={{ pl: '10px', fontSize: '15px' }}>+374-77-055-777</Typography>
+          <AddIcCallIcon />
+          <Link sx={{ paddingLeft: '10px', fontSize: '15px' }} href="tel:+37477055777">
+            +37477055777
+          </Link>
         </Box>
       </Grid>
       <Grid pt={3} item container xs={12} justifyContent="center">
