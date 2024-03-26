@@ -35,7 +35,7 @@ export default function HomePage() {
         alt=""
       />
       <img style={{ width: '20%', height: 'auto' }} src={Image2} />
-      <Typography fontWeight={800} variant="h3" alignSelf="center">
+      <Typography fontWeight={800} sx={{ fontSize: { sm: '48px', xs: '38px' } }} alignSelf="center">
         Coming soon
       </Typography>
     </Grid>

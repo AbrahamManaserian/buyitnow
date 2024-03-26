@@ -172,10 +172,17 @@ export default function CarCard({
 
             <Typography sx={{ fontSize: '15px', fontWeight: 600 }}>${price}0</Typography>
           </Box>
-          <Button1 buynow={buyNow} size="small" variant="contained" color="success" ml={1}>
+          <Button1
+            sx={{ fontSize: '13px', justifyContent: 'center' }}
+            buynow={buyNow}
+            size="small"
+            variant="contained"
+            color="success"
+            ml={1}
+          >
             Buy now
-            <Typography sx={{ fontSize: '15px', fontWeight: 600, pl: '2px' }}>-</Typography>
-            <Typography sx={{ fontSize: '15px', fontWeight: 600, pl: '2px' }}>${buyNow}0</Typography>
+            <Typography sx={{ fontSize: '13px', fontWeight: 600, pl: '2px' }}>-</Typography>
+            <Typography sx={{ fontSize: '13px', fontWeight: 600, pl: '2px' }}>${buyNow}0</Typography>
           </Button1>
           <Typography color={!date.starts ? 'error' : 'info.dark'} sx={{ fontSize: '13px', fontWeight: 500 }}>
             {!date.starts
